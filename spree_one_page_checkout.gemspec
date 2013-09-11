@@ -3,13 +3,17 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_one_page_checkout'
   s.version     = '1.3.3'
-  s.summary     = 'TODO: Add gem summary here'
-  s.description = 'TODO: Add (optional) gem description here'
-  s.required_ruby_version = '>= 1.8.7'
+  s.summary     = 'A Spree extension to implement a one-page checkout.'
+  s.description = """
+    This Spree extension replaces the default Spree checkout workflow with a
+    streamlined one-page checkout, with reusable address and credit-card
+    features.
+  """
+  s.required_ruby_version = '>= 1.9.3'
 
-  # s.author    = 'You'
-  # s.email     = 'you@example.com'
-  # s.homepage  = 'http://www.spreecommerce.com'
+  s.author    = 'Daniel Wright'
+  s.email     = 'daniel@godynamo.com'
+  s.homepage  = 'http://godynamo.com/'
 
   #s.files       = `git ls-files`.split("\n")
   #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
