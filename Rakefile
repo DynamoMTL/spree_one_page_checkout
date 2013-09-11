@@ -11,5 +11,5 @@ task :default => [:spec]
 desc 'Generates a dummy app for testing'
 task :test_app do
   ENV['LIB_NAME'] = 'spree_one_page_checkout'
-  Rake::Task['common:test_app'].invoke
+  Rake::Task['common:test_app'].invoke 'Spree::User'
 end
