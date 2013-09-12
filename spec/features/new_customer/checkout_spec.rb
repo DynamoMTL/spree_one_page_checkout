@@ -5,6 +5,10 @@ require 'spec_helper'
 # Homer Simpson can check out
 
 describe "A new customer", type: :feature do
+  before do
+    sign_up!
+  end
+
   context "with a credit card" do
     it "completes a checkout"
   end
