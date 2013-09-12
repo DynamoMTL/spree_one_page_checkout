@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner', '~> 1.0.1'
   s.add_development_dependency 'factory_girl', '~> 4.2'
   s.add_development_dependency 'ffaker'
+  s.add_development_dependency 'jazz_hands'
   s.add_development_dependency 'rspec-rails',  '~> 2.13'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'sqlite3'
