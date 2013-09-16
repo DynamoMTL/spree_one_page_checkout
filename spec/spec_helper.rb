@@ -8,6 +8,9 @@ require 'rspec/rails'
 require 'database_cleaner'
 require 'ffaker'
 
+require 'capybara/poltergeist'
+Capybara.javascript_driver = :poltergeist
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
@@ -66,5 +69,9 @@ RSpec.configure do |config|
     if example.metadata[:js]
       DatabaseCleaner.strategy = :transaction
     end
+  end
+
+  def take_screenshot(options = {})
+    save_screenshot('./tmp/screenshot.png', options) if respond_to?(:save_screenshot)
   end
 end
