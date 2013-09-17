@@ -24,6 +24,7 @@ describe "A new customer", type: :feature, js: true do
       click_button 'Checkout'
 
       expect(current_path).to eq '/checkout'
+      expect(page).to_not have_css('[data-hook=opco-existing-shipping-address] li')
 
       # address.supply
       within '[data-hook=opco-shipping-address]' do
@@ -34,9 +35,12 @@ describe "A new customer", type: :feature, js: true do
         select 'United States', from: 'Country'
         fill_in 'Zip Code', with: '10001'
         fill_in 'Telephone', with: '555-555-1234'
+
+        click_button 'Save'
       end
 
       expect(current_path).to eq '/checkout'
+      expect(page).to have_css('[data-hook=opco-existing-shipping-address] li', count: 1)
 
       # shipping_method.choose
       within '[data-hook=opco-delivery-method]' do
