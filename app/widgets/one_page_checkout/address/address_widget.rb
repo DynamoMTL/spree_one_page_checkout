@@ -1,5 +1,5 @@
 class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
-  responds_to_event :add_address
+  responds_to_event :reveal_form
 
   def display
     render
@@ -13,7 +13,7 @@ class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
     render
   end
 
-  def add_address(event)
+  def reveal_form(event)
     replace state: :form
   end
 end

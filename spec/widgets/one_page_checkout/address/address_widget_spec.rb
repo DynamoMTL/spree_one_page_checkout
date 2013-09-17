@@ -27,7 +27,7 @@ describe OnePageCheckout::Address::AddressWidget do
     end
   end
 
-  context "when receiving a :add_address event" do
+  context "when receiving a :reveal_form event" do
     register_widget
 
     it "renders the :form state" do
@@ -37,7 +37,7 @@ describe OnePageCheckout::Address::AddressWidget do
         expect(state_or_view).to eq(state: :form)
       end
 
-      trigger(:add_address, :opco_address)
+      trigger(:reveal_form, :opco_address)
     end
   end
 end
