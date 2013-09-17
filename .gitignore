@@ -14,3 +14,5 @@ pkg
 spec/dummy
 .rspec
 .bundle
+zeus.json
+custom_plan.rb
