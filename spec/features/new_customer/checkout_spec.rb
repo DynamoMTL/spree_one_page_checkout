@@ -23,6 +23,8 @@ describe "A new customer", type: :feature, js: true do
       # cart.checkout
       click_button 'Checkout'
 
+      expect(current_path).to eq '/checkout'
+
       # address.supply
       within '[data-hook=opco-shipping-address]' do
         fill_in 'Full Name', with: 'Guy Incognito'
@@ -34,10 +36,14 @@ describe "A new customer", type: :feature, js: true do
         fill_in 'Telephone', with: '555-555-1234'
       end
 
+      expect(current_path).to eq '/checkout'
+
       # shipping_method.choose
       within '[data-hook=opco-delivery-method]' do
         select delivery_method
       end
+
+      expect(current_path).to eq '/checkout'
 
       # credit_card.supply
       within '[data-hook=opco-payment-method]' do
@@ -58,6 +64,8 @@ describe "A new customer", type: :feature, js: true do
           fill_in 'Telephone', with: '555-555-1234'
         end
       end
+
+      expect(current_path).to eq '/checkout'
 
       # confirmation.confirm
       click_on 'Confirm My Order'
