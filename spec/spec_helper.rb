@@ -4,6 +4,7 @@ ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 
 require 'rspec/rails'
+require 'rspec/rails/example/widget_example_group'
 
 require 'database_cleaner'
 require 'ffaker'
@@ -23,6 +24,10 @@ require 'spree/core/url_helpers'
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+
+  # Include WidgetExampleGroup helpers in widget specs
+  config.include RSpec::Rails::WidgetExampleGroup,
+    example_group: { file_path: %r{spec/widgets} }
 
   # == URL Helpers
   #
