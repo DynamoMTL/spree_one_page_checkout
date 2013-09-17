@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'jazz_hands'
+  s.add_development_dependency 'launchy'
   s.add_development_dependency 'poltergeist'
   s.add_development_dependency 'rspec-rails',  '~> 2.13'
   s.add_development_dependency 'sass-rails'
