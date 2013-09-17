@@ -28,15 +28,19 @@ describe "A new customer", type: :feature, js: true do
 
       # address.supply
       within '[data-hook=opco-shipping-address]' do
-        fill_in 'Full Name', with: 'Guy Incognito'
-        fill_in 'Address', with: '1234 Fake St.'
-        fill_in 'City', with: 'New York City'
-        select 'New York', from: 'State'
-        select 'United States', from: 'Country'
-        fill_in 'Zip Code', with: '10001'
-        fill_in 'Telephone', with: '555-555-1234'
+        click_on 'Add Address'
 
-        click_button 'Save'
+        within '[data-hook=opco-new-shipping-address]' do
+          fill_in 'Full Name', with: 'Guy Incognito'
+          fill_in 'Address', with: '1234 Fake St.'
+          fill_in 'City', with: 'New York City'
+          select 'New York', from: 'State'
+          select 'United States', from: 'Country'
+          fill_in 'Zip Code', with: '10001'
+          fill_in 'Telephone', with: '555-555-1234'
+
+          click_button 'Save'
+        end
       end
 
       expect(current_path).to eq '/checkout'
