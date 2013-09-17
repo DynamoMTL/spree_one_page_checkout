@@ -11,13 +11,13 @@ describe OnePageCheckout::Address::AddressWidget do
 
   it "renders the :display state" do
     render_widget(:opco_address, :display).tap do |rendered|
-      expect(rendered).to have_css('form')
+      expect(rendered).to have_selector("h1")
     end
   end
 
   it "renders the :form state" do
     render_widget(:opco_address, :form).tap do |rendered|
-      expect(rendered).to have_selector("h1")
+      expect(rendered).to have_css('form')
     end
   end
 
