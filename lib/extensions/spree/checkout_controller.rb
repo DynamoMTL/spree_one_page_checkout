@@ -6,6 +6,10 @@ module Extensions
       included do
         prepend_before_filter :redirect_to_edit_checkout, only: [:update, :edit], if: :redirect_to_edit?
 
+        has_widgets do |root|
+          root << widget('one_page_checkout/address/address', :opco_address)
+        end
+
         def skip_state_validation?
           true
         end

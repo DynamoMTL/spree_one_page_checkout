@@ -1,0 +1,26 @@
+<%= widget_div(data: { hook: 'opco-new-shipping-address' }) do %>
+  <%= form_for :shipping_address, url: url_for_event(:submit_address), remote: true do |f| %>
+    <%= label_tag :full_name, t(:full_name) %>
+    <%= text_field_tag :full_name %>
+
+    <%= label_tag :address, t(:address) %>
+    <%= text_field_tag :address %>
+
+    <%= label_tag :city, t(:city) %>
+    <%= text_field_tag :city %>
+
+    <%= label_tag :state, t(:state) %>
+    <%= select_tag :state, options_for_select(['New York' => 'New York']) %>
+
+    <%= label_tag :country, t(:country) %>
+    <%= select_tag :country, options_for_select(['United States' => 'United States']) %>
+
+    <%= label_tag :zip_code, t(:zip_code) %>
+    <%= text_field_tag :zip_code %>
+
+    <%= label_tag :telephone, t(:telephone) %>
+    <%= text_field_tag :telephone %>
+
+    <%= button_tag 'Save' %>
+  <% end  %>
+<% end %>
