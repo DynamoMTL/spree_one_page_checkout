@@ -1,5 +1,5 @@
 <%= widget_div(data: { hook: 'opco-new-shipping-address' }) do %>
-  <%= form_for :shipping_address, url: url_for_event(:submit_address), remote: true do |f| %>
+  <%= form_for :shipping_address, url: url_for_event(:create_address), remote: true do |f| %>
     <%= label_tag :full_name, t(:full_name) %>
     <%= text_field_tag :full_name %>
 

@@ -40,4 +40,36 @@ describe OnePageCheckout::Address::AddressWidget do
       trigger(:reveal_form, :opco_address)
     end
   end
+
+  context "when receiving a :create_address event" do
+    register_widget
+
+    let!(:address_widget) { root.find_widget(:opco_address) }
+
+    let(:create_address_factory) { double(:create_address_factory) }
+    let(:create_address_service) { double(:create_address_service) }
+
+    before do
+      address_widget.stub(:create_address_factory).and_return(create_address_factory)
+      address_widget.stub(:replace)
+
+      create_address_factory.stub(:build).and_return(create_address_service)
+      create_address_service.stub(:call)
+    end
+
+    it "persists the new address" do
+      trigger(:create_address, :opco_address)
+
+      expect(create_address_factory).to have_received(:build)
+      expect(create_address_service).to have_received(:call)
+    end
+
+    it "renders the :display state" do
+      trigger(:create_address, :opco_address)
+
+      expect(address_widget).to have_received(:replace) do |state_or_view, args|
+        expect(state_or_view).to eq(state: :display)
+      end
+    end
+  end
 end
