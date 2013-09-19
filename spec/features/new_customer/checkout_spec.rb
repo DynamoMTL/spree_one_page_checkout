@@ -31,20 +31,23 @@ describe "A new customer", type: :feature, js: true do
         click_on 'Add Address'
 
         within '[data-hook=opco-new-shipping-address]' do
-          fill_in 'Full Name', with: 'Guy Incognito'
+          fill_in 'First Name', with: 'Guy'
+          fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
           fill_in 'City', with: 'New York City'
           select 'New York', from: 'State'
-          select 'United States', from: 'Country'
           fill_in 'Zip Code', with: '10001'
           fill_in 'Telephone', with: '555-555-1234'
+
+          # Use the default country
+          # select 'United States', from: 'Country'
 
           click_button 'Save'
         end
       end
 
       expect(current_path).to eq '/checkout'
-      expect(page).to have_css('[data-hook=opco-existing-shipping-address] li', count: 1)
+      expect(page).to have_css('[data-hook=opco-existing-shipping-address]', count: 1)
 
       # shipping_method.choose
       within '[data-hook=opco-delivery-method]' do

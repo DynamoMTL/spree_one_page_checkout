@@ -1,26 +1,29 @@
 <%= widget_div(data: { hook: 'opco-new-shipping-address' }) do %>
-  <%= form_for :shipping_address, url: url_for_event(:create_address), remote: true do |f| %>
-    <%= label_tag :full_name, t(:full_name) %>
-    <%= text_field_tag :full_name %>
+  <%= form_for @form, url: url_for_event(:create_address), remote: true do |f| %>
+    <%= f.label :firstname, t(:first_name) %>
+    <%= f.text_field :firstname %>
 
-    <%= label_tag :address, t(:address) %>
-    <%= text_field_tag :address %>
+    <%= f.label :lastname, t(:last_name) %>
+    <%= f.text_field :lastname %>
 
-    <%= label_tag :city, t(:city) %>
-    <%= text_field_tag :city %>
+    <%= f.label :address1, t(:street_address) %>
+    <%= f.text_field :address1 %>
 
-    <%= label_tag :state, t(:state) %>
-    <%= select_tag :state, options_for_select(['New York' => 'New York']) %>
+    <%= f.label :city, t(:city) %>
+    <%= f.text_field :city %>
 
-    <%= label_tag :country, t(:country) %>
-    <%= select_tag :country, options_for_select(['United States' => 'United States']) %>
+    <%= f.label :state_name, t(:state) %>
+    <%= f.select :state_name, options_for_select(['New York']) %>
 
-    <%= label_tag :zip_code, t(:zip_code) %>
-    <%= text_field_tag :zip_code %>
+    <%= f.label :country_id, t(:country) %>
+    <%= f.collection_select :country_id, Spree::Country.all, :id, :name, include_blank: false %>
 
-    <%= label_tag :telephone, t(:telephone) %>
-    <%= text_field_tag :telephone %>
+    <%= f.label :zipcode, t(:zip_code) %>
+    <%= f.text_field :zipcode %>
 
-    <%= button_tag 'Save' %>
+    <%= f.label :phone, t(:telephone) %>
+    <%= f.text_field :phone %>
+
+    <%= f.button 'Save' %>
   <% end  %>
 <% end %>

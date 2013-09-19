@@ -11,7 +11,7 @@ describe OnePageCheckout::Address::AddressWidget do
 
   it "renders the :display state" do
     render_widget(:opco_address, :display).tap do |rendered|
-      expect(rendered).to have_selector("h1")
+      expect(rendered).to have_selector("[data-hook=opco-existing-shipping-address]")
     end
   end
 
@@ -46,30 +46,69 @@ describe OnePageCheckout::Address::AddressWidget do
 
     let!(:address_widget) { root.find_widget(:opco_address) }
 
-    let(:create_address_factory) { double(:create_address_factory) }
-    let(:create_address_service) { double(:create_address_service) }
+    let(:address_form) { double(:address_form) }
+    let(:address_params) { double(:address_params) }
+
+    let(:address_form_nested_data) { double(:address_form_nested_data) }
 
     before do
-      address_widget.stub(:create_address_factory).and_return(create_address_factory)
+      Forms::AddressForm.stub(:new).and_return(address_form)
+
+      address_form.stub(:validate)
+      address_form.stub(:save)
+
       address_widget.stub(:replace)
-
-      create_address_factory.stub(:build).and_return(create_address_service)
-      create_address_service.stub(:call)
     end
 
-    it "persists the new address" do
-      trigger(:create_address, :opco_address)
+    it "validates the address submission" do
+      expect(address_form).to receive(:validate).with(address_params)
 
-      expect(create_address_factory).to have_received(:build)
-      expect(create_address_service).to have_received(:call)
+      trigger!
     end
 
-    it "renders the :display state" do
-      trigger(:create_address, :opco_address)
+    context "with a valid address submission" do
+      register_widget
 
-      expect(address_widget).to have_received(:replace) do |state_or_view, args|
-        expect(state_or_view).to eq(state: :display)
+      before do
+        address_form.stub(:validate).and_return(true)
+        address_form.stub(:save).and_yield(double, address_form_nested_data)
+
+        Spree::Address.stub(:create!).and_return(true)
       end
+
+      it "persists the new address" do
+        expect(Spree::Address).to receive(:create!).with(address_form_nested_data)
+
+        trigger!
+      end
+
+      it "renders the :display state" do
+        expect(address_widget).to receive(:replace) do |state_or_view, args|
+          expect(state_or_view).to eq(state: :display)
+        end
+
+        trigger!
+      end
+    end
+
+    context "with an invalid address submission" do
+      register_widget
+
+      before do
+        address_form.stub(:validate).and_return(false)
+      end
+
+      it "redraws the :form state" do
+        expect(address_widget).to receive(:replace) do |state_or_view, args|
+          expect(state_or_view).to eq(state: :form)
+        end
+
+        trigger!
+      end
+    end
+
+    def trigger!
+      trigger(:create_address, :opco_address, { address: address_params })
     end
   end
 end
