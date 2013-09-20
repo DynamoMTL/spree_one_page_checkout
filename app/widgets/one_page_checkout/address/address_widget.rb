@@ -7,7 +7,7 @@ class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
   end
 
   def form
-    @form ||= build_new_address_form
+    @form ||= new_address_form
 
     render
   end
@@ -17,13 +17,7 @@ class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
   end
 
   def create_address(event)
-    @form = build_new_address_form
-
-    if @form.validate(event.data.fetch(:address))
-      @form.save do |data, nested|
-        @address = Spree::Address.create!(nested)
-      end
-
+    if create_address_service(event.data.fetch(:address))
       replace state: :display
     else
       replace state: :form
@@ -36,7 +30,25 @@ class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
 
   private
 
-  def build_new_address_form
-    Forms::AddressForm.new(Spree::Address.new)
+  # FIXME Uninjected collaborator
+  def address_factory
+    Spree::Address
+  end
+
+  # FIXME Uninjected collaborator
+  def address_form_factory
+    Forms::AddressForm
+  end
+
+  def create_address_service(attrs)
+    return unless new_address_form.validate(attrs)
+
+    new_address_form.save do |data, nested|
+      @address = address_factory.create!(nested)
+    end
+  end
+
+  def new_address_form
+    @_form ||= address_form_factory.new(address_factory.new)
   end
 end
