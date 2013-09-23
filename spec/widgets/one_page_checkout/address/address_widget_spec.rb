@@ -33,7 +33,7 @@ describe OnePageCheckout::Address::AddressWidget do
     it "renders the :form state" do
       address_widget = root.find_widget(:opco_address)
 
-      address_widget.should_receive(:replace) do |state_or_view, args|
+      expect(address_widget).to receive(:replace) do |state_or_view, args|
         expect(state_or_view).to eq(state: :form)
       end
 
@@ -47,39 +47,21 @@ describe OnePageCheckout::Address::AddressWidget do
     let!(:address_widget) { root.find_widget(:opco_address) }
 
     let(:address_form) { double(:address_form) }
-    let(:address_params) { double(:address_params) }
-
-    let(:address_form_nested_data) { double(:address_form_nested_data) }
+    let(:create_address_service) { double(:create_address_service)}
 
     before do
+      CreateAddressFactory.stub(:build).and_return(create_address_service)
       Forms::AddressForm.stub(:new).and_return(address_form)
 
-      address_form.stub(:validate)
-      address_form.stub(:save)
-
       address_widget.stub(:replace)
-    end
-
-    it "validates the address submission" do
-      expect(address_form).to receive(:validate).with(address_params)
-
-      trigger!
+      create_address_service.stub(:call)
     end
 
     context "with a valid address submission" do
       register_widget
 
       before do
-        address_form.stub(:validate).and_return(true)
-        address_form.stub(:save).and_yield(double, address_form_nested_data)
-
-        Spree::Address.stub(:create!).and_return(true)
-      end
-
-      it "persists the new address" do
-        expect(Spree::Address).to receive(:create!).with(address_form_nested_data)
-
-        trigger!
+        create_address_service.stub(:call).and_return(true)
       end
 
       it "renders the :display state" do
@@ -95,7 +77,7 @@ describe OnePageCheckout::Address::AddressWidget do
       register_widget
 
       before do
-        address_form.stub(:validate).and_return(false)
+        create_address_service.stub(:call).and_return(false)
       end
 
       it "redraws the :form state" do
@@ -108,7 +90,7 @@ describe OnePageCheckout::Address::AddressWidget do
     end
 
     def trigger!
-      trigger(:create_address, :opco_address, { address: address_params })
+      trigger(:create_address, :opco_address, { address: double })
     end
   end
 end
