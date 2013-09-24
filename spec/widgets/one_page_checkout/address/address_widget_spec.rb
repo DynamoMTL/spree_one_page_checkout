@@ -9,20 +9,26 @@ end
 describe OnePageCheckout::Address::AddressWidget do
   register_widget
 
+  let(:user) { double('user', id: 1) }
+
+  before do
+    Spree::User.stub(:find).and_return(user)
+  end
+
   it "renders the :display state" do
-    render_widget(:opco_address, :display).tap do |rendered|
+    render_widget(:opco_address, :display, user: user).tap do |rendered|
       expect(rendered).to have_selector("[data-hook=opco-existing-shipping-address]")
     end
   end
 
   it "renders the :form state" do
-    render_widget(:opco_address, :form).tap do |rendered|
+    render_widget(:opco_address, :form, user: user).tap do |rendered|
       expect(rendered).to have_css('form')
     end
   end
 
   it "renders the :call_to_action state" do
-    render_widget(:opco_address, :call_to_action).tap do |rendered|
+    render_widget(:opco_address, :call_to_action, user: user).tap do |rendered|
       expect(rendered).to have_css('a', text: 'Add Address')
     end
   end
@@ -64,9 +70,14 @@ describe OnePageCheckout::Address::AddressWidget do
         create_address_service.stub(:call).and_return(true)
       end
 
-      it "renders the :display state" do
-        expect(address_widget).to receive(:replace) do |state_or_view, args|
-          expect(state_or_view).to eq(state: :display)
+      it "triggers a :select_address event with the new address" do
+        # TODO Is the new address assigned to the order by default?
+        pending "integration with order-creation"
+      end
+
+      it "triggers a :address_created event" do
+        expect(address_widget).to receive(:trigger) do |event|
+          expect(event).to eq(:address_created)
         end
 
         trigger!
@@ -90,7 +101,7 @@ describe OnePageCheckout::Address::AddressWidget do
     end
 
     def trigger!
-      trigger(:create_address, :opco_address, { address: double })
+      trigger(:create_address, :opco_address, { address: double, user: double })
     end
   end
 end

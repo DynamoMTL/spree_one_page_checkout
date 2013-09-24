@@ -27,10 +27,10 @@ describe "A new customer", type: :feature, js: true do
       expect(page).to_not have_css('[data-hook=opco-existing-shipping-address] li')
 
       # address.supply
-      within '[data-hook=opco-shipping-address]' do
+      within '[data-hook=opco-shipping-address-book]' do
         click_on 'Add Address'
 
-        within '[data-hook=opco-new-shipping-address]' do
+        within '[data-hook=opco-new-shipping-address] form' do
           fill_in 'First Name', with: 'Guy'
           fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
@@ -47,7 +47,11 @@ describe "A new customer", type: :feature, js: true do
       end
 
       expect(current_path).to eq '/checkout'
-      expect(page).to have_css('[data-hook=opco-existing-shipping-address]', count: 1)
+
+      expect(page).to have_css('[data-hook=opco-existing-shipping-address]', count: 1, text: /1234 Fake St/)
+      expect(page).to have_css('[data-hook=opco-new-shipping-address]', count: 1)
+
+      pending "further implementation"
 
       # shipping_method.choose
       within '[data-hook=opco-delivery-method]' do

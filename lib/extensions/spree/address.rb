@@ -5,6 +5,8 @@ module Extensions
 
       included do
         belongs_to :user, class_name: 'Spree::User'
+
+        attr_accessible :user_id
       end
     end
   end

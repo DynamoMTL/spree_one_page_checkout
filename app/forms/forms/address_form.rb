@@ -11,6 +11,7 @@ module Forms
       country_id
       zipcode
       phone
+      user_id
     )
 
     validates :firstname, :lastname, :address1,

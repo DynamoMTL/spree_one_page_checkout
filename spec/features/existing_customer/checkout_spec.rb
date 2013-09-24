@@ -23,8 +23,8 @@ describe "An existing customer", type: :feature, js: true do
              city: 'Springfield',
              state_name: 'North Takoma',
              zipcode: '90701',
-             phone: '939-555-0113'
-             # user: marge_simpson
+             phone: '939-555-0113',
+             user: marge_simpson
             )
     end
 
@@ -38,15 +38,8 @@ describe "An existing customer", type: :feature, js: true do
       click_button 'Checkout'
 
       expect(current_path).to eq '/checkout'
-      expect(page).to have_css('[data-hook=opco-existing-shipping-address]', count: 1)
+      expect(page).to have_css('[data-hook=opco-existing-shipping-address]', count: 1, text: /742 Evergreen Terrace/)
       expect(page).to have_css('[data-hook=opco-new-shipping-address]', count: 1)
-
-      # address.choose
-      within '[data-hook=opco-shipping-address]' do
-        # Select an address from address-book
-      end
-
-      expect(current_path).to eq '/checkout'
 
       pending "further implementation"
     end

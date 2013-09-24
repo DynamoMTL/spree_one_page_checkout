@@ -3,35 +3,47 @@ class OnePageCheckout::Address::AddressWidget < Apotomo::Widget
   responds_to_event :create_address
 
   def display(address = nil)
+    @address = address
+
     render
   end
 
-  def form
+  def form(options = {})
+    assign_user(options)
+
     @form ||= new_address_form
 
     render
   end
 
-  def call_to_action
+  def call_to_action(options = {})
+    assign_user(options)
+
     render
   end
 
   def create_address(event)
+    assign_user(event.data)
+
     if @address = create_address_service.call(event.data.fetch(:address))
-      replace state: :display
+      trigger :address_created, user: @user
     else
       replace state: :form
     end
   end
 
   def reveal_form(event)
-    replace state: :form
+    replace({ state: :form }, event.data)
   end
 
   private
 
   def address_form_factory
     Forms::AddressForm
+  end
+
+  def assign_user(options)
+    @user = Spree::User.find(options.fetch(:user))
   end
 
   def create_address_service
