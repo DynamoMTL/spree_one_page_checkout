@@ -2,7 +2,7 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/address_book/new_address', :opco_new_address)
+    root << widget('one_page_checkout/address_book/new_address', :opco_new_address, user: user)
   end
 end
 
@@ -11,18 +11,14 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
 
   let(:user) { double('user', id: 1) }
 
-  before do
-    Spree::User.stub(:find).and_return(user)
-  end
-
   it "renders the :form state" do
-    render_widget(:opco_new_address, :form, user: user).tap do |rendered|
+    render_widget(:opco_new_address, :form).tap do |rendered|
       expect(rendered).to have_css('form')
     end
   end
 
   it "renders the :call_to_action state" do
-    render_widget(:opco_new_address, :call_to_action, user: user).tap do |rendered|
+    render_widget(:opco_new_address, :call_to_action).tap do |rendered|
       expect(rendered).to have_css('a', text: 'Add Address')
     end
   end
@@ -95,7 +91,7 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
     end
 
     def trigger!
-      trigger(:create_address, :opco_new_address, { address: double, user: double })
+      trigger(:create_address, :opco_new_address, { address: double })
     end
   end
 end

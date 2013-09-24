@@ -2,7 +2,7 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/address_book/panel', :opco_address_book)
+    root << widget('one_page_checkout/address_book/panel', :opco_address_book, user: current_user)
   end
 end
 
@@ -12,7 +12,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   let!(:address_book_widget) { root.find_widget(:opco_address_book) }
 
   let(:current_user) { create(:user) }
-  let(:rendered) { render_widget(:opco_address_book, :display, user: current_user) }
+  let(:rendered) { render_widget(:opco_address_book, :display) }
 
   it "renders the address-book panel" do
     expect(rendered).to have_selector("[data-hook=opco-shipping-address-book]")
@@ -44,7 +44,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
         expect(state_or_view).to eq(state: :display)
       end
 
-      trigger(:address_created, :opco_address_book, { user: double })
+      trigger(:address_created, :opco_address_book)
     end
   end
 end
