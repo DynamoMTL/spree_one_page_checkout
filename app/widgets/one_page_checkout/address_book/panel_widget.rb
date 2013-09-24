@@ -13,7 +13,7 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   end
 
   def address_created(event)
-    replace({ state: :display }, event.data.fetch(:user))
+    replace({ state: :display }, event.data)
   end
 
   private
