@@ -6,13 +6,19 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
     root << widget('one_page_checkout/address_book/address', :new_address_book_entry)
   end
 
-  def display(user)
-    @user = user
+  def display(options = {})
+    assign_user(options)
 
     render
   end
 
   def address_created(event)
     replace({ state: :display }, event.data.fetch(:user))
+  end
+
+  private
+
+  def assign_user(options)
+    @user = Spree::User.find(options.fetch(:user))
   end
 end

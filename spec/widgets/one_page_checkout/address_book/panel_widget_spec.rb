@@ -12,7 +12,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   let!(:address_book_widget) { root.find_widget(:opco_address_book) }
 
   let(:current_user) { create(:user) }
-  let(:rendered) { render_widget(:opco_address_book, :display, current_user) }
+  let(:rendered) { render_widget(:opco_address_book, :display, user: current_user) }
 
   it "renders the address-book panel" do
     expect(rendered).to have_selector("[data-hook=opco-shipping-address-book]")
