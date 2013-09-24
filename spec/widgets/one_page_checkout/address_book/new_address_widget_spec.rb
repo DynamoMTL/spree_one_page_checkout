@@ -15,12 +15,6 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
     Spree::User.stub(:find).and_return(user)
   end
 
-  it "renders the :display state" do
-    render_widget(:opco_new_address, :display, user: user).tap do |rendered|
-      expect(rendered).to have_selector("[data-hook=opco-existing-shipping-address]")
-    end
-  end
-
   it "renders the :form state" do
     render_widget(:opco_new_address, :form, user: user).tap do |rendered|
       expect(rendered).to have_css('form')

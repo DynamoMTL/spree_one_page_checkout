@@ -2,12 +2,6 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
   responds_to_event :reveal_form
   responds_to_event :create_address
 
-  def display(address = nil)
-    @address = address
-
-    render
-  end
-
   def form(options = {})
     assign_user(options)
 
@@ -48,10 +42,6 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
 
   def create_address_service
     @_create_address_service = CreateAddressFactory.build(new_address_form)
-  end
-
-  def edit_address_form
-    raise NotImplementedError
   end
 
   def new_address_form
