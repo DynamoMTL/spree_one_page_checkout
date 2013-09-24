@@ -1,4 +1,4 @@
-class OnePageCheckout::AddressBook::AddressWidget < Apotomo::Widget
+class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
   responds_to_event :reveal_form
   responds_to_event :create_address
 
