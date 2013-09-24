@@ -1,5 +1,8 @@
 module SpreeOnePageCheckout
   class Engine < Rails::Engine
+    require 'apotomo'
+    require 'reform'
+
     require 'spree/core'
     isolate_namespace Spree
     engine_name 'spree_one_page_checkout'
