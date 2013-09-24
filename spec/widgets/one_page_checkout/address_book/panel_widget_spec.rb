@@ -2,11 +2,11 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/address/panel', :opco_address_book)
+    root << widget('one_page_checkout/address_book/panel', :opco_address_book)
   end
 end
 
-describe OnePageCheckout::Address::PanelWidget do
+describe OnePageCheckout::AddressBook::PanelWidget do
   register_widget
 
   let!(:address_book_widget) { root.find_widget(:opco_address_book) }
