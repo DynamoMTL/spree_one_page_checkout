@@ -2,10 +2,9 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
   responds_to_event :reveal_form
   responds_to_event :create_address
 
-  def form(options = {})
+  def form(options)
     assign_user(options)
-
-    @form ||= new_address_form
+    assign_form
 
     render
   end
@@ -19,7 +18,7 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
   def create_address(event)
     assign_user(event.data)
 
-    if @address = create_address_service.call(event.data.fetch(:address))
+    if create_address_service.call(event.data.fetch(:address))
       trigger :address_created, user: @user
     else
       replace state: :form
@@ -36,15 +35,19 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
     Forms::AddressForm
   end
 
+  def address_form
+    @_address_form = address_form_factory.new(Spree::Address.new)
+  end
+
+  def assign_form
+    @form = address_form
+  end
+
   def assign_user(options)
     @user = Spree::User.find(options.fetch(:user))
   end
 
   def create_address_service
-    @_create_address_service = CreateAddressFactory.build(new_address_form)
-  end
-
-  def new_address_form
-    @_new_address_form = address_form_factory.new(Spree::Address.new)
+    @_create_address_service = CreateAddressFactory.build(address_form)
   end
 end
