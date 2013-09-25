@@ -17,8 +17,8 @@ class OnePageCheckout::AddressBook::NewAddressWidget < Apotomo::Widget
   end
 
   def create_address(event)
-    if create_address_service.call(event.data.fetch(:address))
-      trigger :address_created
+    if address = create_address_service.call(event.data.fetch(:address))
+      trigger :address_created, new_address: address
     else
       replace state: :form
     end

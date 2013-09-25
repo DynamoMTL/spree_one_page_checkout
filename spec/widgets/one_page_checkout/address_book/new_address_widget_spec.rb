@@ -44,12 +44,14 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
 
     let(:address_form) { double(:address_form) }
     let(:create_address_service) { double(:create_address_service)}
+    let(:new_address) { double(:new_address) }
 
     before do
       CreateAddressFactory.stub(:build).and_return(create_address_service)
       Forms::AddressForm.stub(:new).and_return(address_form)
 
       address_widget.stub(:replace)
+      address_widget.stub(:trigger)
       create_address_service.stub(:call)
     end
 
@@ -57,18 +59,11 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
       register_widget
 
       before do
-        create_address_service.stub(:call).and_return(true)
-      end
-
-      it "triggers a :select_address event with the new address" do
-        # TODO Is the new address assigned to the order by default?
-        pending "integration with order-creation"
+        create_address_service.stub(:call).and_return(new_address)
       end
 
       it "triggers a :address_created event" do
-        expect(address_widget).to receive(:trigger) do |event|
-          expect(event).to eq(:address_created)
-        end
+        expect(address_widget).to receive(:trigger).with(:address_created, new_address: new_address)
 
         trigger!
       end

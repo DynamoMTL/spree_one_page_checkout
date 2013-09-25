@@ -11,6 +11,7 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   def initialize(parent, id, options = {})
     super(parent, id, options)
 
+    @order = options.fetch(:order)
     @user = options.fetch(:user)
   end
 
@@ -19,6 +20,13 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   end
 
   def address_created(event)
+    order.ship_address = event.data.fetch(:new_address)
+    order.save!
+
     replace state: :display
   end
+
+  private
+
+  attr_reader :order
 end

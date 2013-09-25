@@ -2,7 +2,7 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/address_book/panel', :opco_address_book, user: current_user)
+    root << widget('one_page_checkout/address_book/panel', :opco_address_book, user: current_user, order: current_order)
   end
 end
 
@@ -12,6 +12,8 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   let!(:address_book_widget) { root.find_widget(:opco_address_book) }
 
   let(:current_user) { create(:user) }
+  let(:current_order) { create(:order) }
+
   let(:rendered) { render_widget(:opco_address_book, :display) }
 
   it "renders the address-book panel" do
@@ -37,6 +39,13 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   context "when receiving an :address_created event" do
     register_widget
 
+    let(:new_address) { double(:new_address) }
+
+    before do
+      current_order.stub(:ship_address=)
+      current_order.stub(:save!)
+    end
+
     it "renders the :display state" do
       address_book_widget = root.find_widget(:opco_address_book)
 
@@ -44,7 +53,20 @@ describe OnePageCheckout::AddressBook::PanelWidget do
         expect(state_or_view).to eq(state: :display)
       end
 
-      trigger(:address_created, :opco_address_book)
+      trigger!
+    end
+
+    it "assigns the new address as the order's shipping address" do
+      address_book_widget = root.find_widget(:opco_address_book)
+
+      expect(current_order).to receive(:ship_address=).with(new_address)
+      expect(current_order).to receive(:save!)
+
+      trigger!
+    end
+
+    def trigger!
+      trigger(:address_created, :opco_address_book, new_address: new_address)
     end
   end
 end
