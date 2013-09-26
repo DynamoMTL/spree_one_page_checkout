@@ -63,7 +63,7 @@ describe "A new customer", type: :feature, js: true do
       end
 
       # shipping_method.choose
-      within '[data-hook=opco-delivery-method]' do
+      within '[data-hook=opco-shipping-method]' do
         select shipping_method.name
       end
 

@@ -1,4 +1,4 @@
-class OnePageCheckout::Delivery::PanelWidget < Apotomo::Widget
+class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   responds_to_event :address_chosen, passing: :root
   responds_to_event :choose_shipping_method
 
