@@ -39,6 +39,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   context "when receiving an :address_created event" do
     register_widget
 
+    let(:address_book_widget) { root.find_widget(:opco_address_book) }
     let(:new_address) { double(:new_address) }
 
     before do
@@ -47,8 +48,6 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     end
 
     it "renders the :display state" do
-      address_book_widget = root.find_widget(:opco_address_book)
-
       expect(address_book_widget).to receive(:replace) do |state_or_view, args|
         expect(state_or_view).to eq(state: :display)
       end
@@ -61,6 +60,12 @@ describe OnePageCheckout::AddressBook::PanelWidget do
 
       expect(current_order).to receive(:ship_address=).with(new_address)
       expect(current_order).to receive(:save!)
+
+      trigger!
+    end
+
+    it "triggers an :address_chosen event" do
+      expect(address_book_widget).to receive(:trigger).with(:address_chosen)
 
       trigger!
     end

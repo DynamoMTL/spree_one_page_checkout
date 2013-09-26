@@ -12,6 +12,7 @@ describe "A new customer", type: :feature, js: true do
   end
 
   let(:beef_slab) { create(:product) }
+  let!(:shipping_method) { create(:shipping_method) }
 
   context "with a credit card" do
     it "completes a checkout" do
@@ -61,14 +62,18 @@ describe "A new customer", type: :feature, js: true do
         expect(shipping_address.address1).to match /1234 Fake St/
       end
 
-      pending "further implementation"
-
       # shipping_method.choose
       within '[data-hook=opco-delivery-method]' do
-        select delivery_method
+        select shipping_method.name
       end
 
       expect(current_path).to eq '/checkout'
+
+      current_order.reload.shipping_method.tap do |shipping_method|
+        expect(shipping_method).to eq shipping_method
+      end
+
+      pending_further_implementation!
 
       # credit_card.supply
       within '[data-hook=opco-payment-method]' do
@@ -105,5 +110,10 @@ describe "A new customer", type: :feature, js: true do
 
   context "with store credit" do
     it "completes a checkout"
+  end
+
+  def pending_further_implementation!
+    sleep 2
+    pending "further implementation"
   end
 end
