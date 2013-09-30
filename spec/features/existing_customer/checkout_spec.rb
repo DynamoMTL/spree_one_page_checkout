@@ -38,8 +38,11 @@ describe "An existing customer", type: :feature, js: true do
       click_button 'Checkout'
 
       expect(current_path).to eq '/checkout'
-      expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /742 Evergreen Terrace/)
-      expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+
+      within '[data-hook=opco-shipping-address]' do
+        expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /742 Evergreen Terrace/)
+        expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      end
 
       pending "further implementation"
     end

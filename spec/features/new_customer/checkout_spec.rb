@@ -25,7 +25,10 @@ describe "A new customer", type: :feature, js: true do
       click_button 'Checkout'
 
       expect(current_path).to eq '/checkout'
-      expect(page).to_not have_css('[data-hook=opco-existing-address]')
+
+      within '[data-hook=opco-shipping-address]' do
+        expect(page).to_not have_css('[data-hook=opco-existing-address]')
+      end
 
       # (Temporary) DMA objects
       current_user  = Spree::User.first
@@ -53,8 +56,10 @@ describe "A new customer", type: :feature, js: true do
 
       expect(current_path).to eq '/checkout'
 
-      expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /1234 Fake St/)
-      expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      within '[data-hook=opco-shipping-address]' do
+        expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /1234 Fake St/)
+        expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      end
 
       # (Temporary) DMA expectations to motivate integration with orders
       current_order.reload.ship_address.tap do |shipping_address|

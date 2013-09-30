@@ -9,6 +9,7 @@ module Extensions
         has_widgets do |root|
           root << widget('one_page_checkout/shipping_address', :opco_shipping_address, user: spree_current_user, order: current_order)
           root << widget('one_page_checkout/shipping_method', :opco_shipping_method, user: spree_current_user, order: current_order)
+          root << widget('one_page_checkout/payment_method', :opco_payment_method, user: spree_current_user, order: current_order)
         end
 
         def skip_state_validation?
