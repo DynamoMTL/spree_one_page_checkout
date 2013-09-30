@@ -1,7 +1,6 @@
 <%= widget_div(data: { hook: "opco-shipping-method" }) do %>
   <%=
-    select_tag :shipping_method_id,
-      options_from_collection_for_select(order.rate_hash, :id, :name),
+    select_tag :shipping_method_id, shipping_method_options,
       { data: {
         method: :post,
         remote: true,
