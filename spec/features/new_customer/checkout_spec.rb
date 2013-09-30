@@ -80,14 +80,16 @@ describe "A new customer", type: :feature, js: true do
 
       # credit_card.supply
       within '[data-hook=opco-payment-method]' do
-        within '[data-hook=opco-card-details]' do
+        within '[data-hook=opco-payment-details]' do
           fill_in 'Card Number', with: '4111111111111111'
           select '1', from: 'Expiration Month'
           select '2015', from: 'Expiration Year'
           fill_in 'Verification Value', with: '123'
         end
 
-        within '[data-hook=opco-billing-address]' do
+        click_on 'Add Address'
+
+        within '[data-hook=opco-new-address]' do
           fill_in 'First Name', with: 'Guy'
           fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
@@ -98,8 +100,12 @@ describe "A new customer", type: :feature, js: true do
 
           # Use the default country
           # select 'United States', from: 'Country'
+
+          click_button 'Save'
         end
       end
+
+      sleep 2
 
       expect(current_path).to eq '/checkout'
 
