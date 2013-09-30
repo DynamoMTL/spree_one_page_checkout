@@ -14,7 +14,7 @@ module OnePageCheckout::AddressBook
 
     it "renders the :display state" do
       render_widget(:opco_existing_address, :display).tap do |rendered|
-        expect(rendered).to have_selector("[data-hook=opco-existing-shipping-address]")
+        expect(rendered).to have_selector("[data-hook=opco-existing-address]")
       end
     end
   end

@@ -17,11 +17,11 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   let(:rendered) { render_widget(:opco_address_book, :display) }
 
   it "renders the address-book panel" do
-    expect(rendered).to have_selector("[data-hook=opco-shipping-address-book]")
+    expect(rendered).to have_selector("[data-hook=opco-address-book]")
   end
 
   it "renders the new-address form" do
-    expect(rendered).to have_selector('[data-hook=opco-new-shipping-address]')
+    expect(rendered).to have_selector('[data-hook=opco-new-address]')
   end
 
   context "with addresses in the current user's address-book" do
@@ -32,7 +32,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     end
 
     it "renders an address-book entry for each address" do
-      expect(rendered).to have_selector('[data-hook=opco-existing-shipping-address]', count: 2)
+      expect(rendered).to have_selector('[data-hook=opco-existing-address]', count: 2)
     end
   end
 
@@ -54,6 +54,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
       trigger!
     end
 
+    # FIXME Extract to ShippingAddress widget
     it "assigns the new address as the order's shipping address" do
       expect(current_order).to receive(:update_attribute).with(:ship_address, new_address)
 

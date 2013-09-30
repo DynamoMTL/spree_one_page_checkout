@@ -7,7 +7,7 @@ module Extensions
         prepend_before_filter :redirect_to_edit_checkout, only: [:update, :edit], if: :redirect_to_edit?
 
         has_widgets do |root|
-          root << widget('one_page_checkout/address_book/panel', :opco_address_book, user: spree_current_user, order: current_order)
+          root << widget('one_page_checkout/shipping_address', :opco_shipping_address, user: spree_current_user, order: current_order)
           root << widget('one_page_checkout/shipping_method', :opco_shipping_method, user: spree_current_user, order: current_order)
         end
 
