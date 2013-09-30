@@ -21,7 +21,7 @@ module OnePageCheckout
       expect(rendered).to have_selector("[data-hook=opco-shipping-method]")
     end
 
-    context "when receiving an :address_chosen event" do
+    context "when receiving an :shipping_address_updated event" do
       register_widget
 
       it "redraws the :display state" do
@@ -33,7 +33,7 @@ module OnePageCheckout
       end
 
       def trigger!
-        trigger(:address_chosen, :opco_shipping_method)
+        trigger(:shipping_address_updated, :opco_shipping_method)
       end
     end
 

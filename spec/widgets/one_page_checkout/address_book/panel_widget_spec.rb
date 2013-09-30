@@ -42,27 +42,10 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     let(:address_book_widget) { root.find_widget(:opco_address_book) }
     let(:new_address) { double(:new_address) }
 
-    before do
-      current_order.stub(:update_attribute)
-    end
-
     it "renders the :display state" do
       expect(address_book_widget).to receive(:replace) do |state_or_view, args|
         expect(state_or_view).to eq(state: :display)
       end
-
-      trigger!
-    end
-
-    # FIXME Extract to ShippingAddress widget
-    it "assigns the new address as the order's shipping address" do
-      expect(current_order).to receive(:update_attribute).with(:ship_address, new_address)
-
-      trigger!
-    end
-
-    it "triggers an :address_chosen event" do
-      expect(address_book_widget).to receive(:trigger).with(:address_chosen)
 
       trigger!
     end

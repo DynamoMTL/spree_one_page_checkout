@@ -1,7 +1,7 @@
 class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   include ActionView::Helpers::FormOptionsHelper
 
-  responds_to_event :address_chosen, passing: :root
+  responds_to_event :shipping_address_updated, passing: :root
   responds_to_event :choose_shipping_method
 
   def initialize(parent, id, options = {})
@@ -17,11 +17,12 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
     render
   end
 
-  def address_chosen(event)
+  def shipping_address_updated(event)
     replace state: :display
   end
 
   def choose_shipping_method(event)
+    # FIXME Exposes internal structure of Order
     order.update_attribute(:shipping_method_id, event.data.fetch(:shipping_method_id))
 
     replace state: :display
@@ -33,6 +34,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   helper_method :shipping_method_options
 
   def shipping_methods
+    # FIXME Exposes internal structure of Order
     @_shipping_methods ||= order.rate_hash
   end
 
