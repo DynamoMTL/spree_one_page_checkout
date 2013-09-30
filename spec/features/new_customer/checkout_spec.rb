@@ -73,29 +73,39 @@ describe "A new customer", type: :feature, js: true do
         expect(shipping_method).to eq shipping_method
       end
 
-      pending_further_implementation!
-
       # credit_card.supply
       within '[data-hook=opco-payment-method]' do
         within '[data-hook=opco-card-details]' do
           fill_in 'Card Number', with: '4111111111111111'
-          select '01', from: 'Expiration Month'
+          select '1', from: 'Expiration Month'
           select '2015', from: 'Expiration Year'
-          fill_in 'Card Verification Value', with: '123'
+          fill_in 'Verification Value', with: '123'
         end
 
         within '[data-hook=opco-billing-address]' do
-          fill_in 'Full Name', with: 'Guy Incognito'
+          fill_in 'First Name', with: 'Guy'
+          fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
           fill_in 'City', with: 'New York City'
           select 'New York', from: 'State'
-          select 'United States', from: 'Country'
           fill_in 'Zip Code', with: '10001'
           fill_in 'Telephone', with: '555-555-1234'
+
+          # Use the default country
+          # select 'United States', from: 'Country'
         end
       end
 
       expect(current_path).to eq '/checkout'
+
+      current_order.reload.tap do |order|
+        expect(order.bill_address.lastname).to match /Incognito/
+        expect(order.bill_address.address1).to match /1234 Fake St./
+
+        expect(order.payments).to have(1).item
+      end
+
+      pending_further_implementation!
 
       # confirmation.confirm
       click_on 'Confirm My Order'
