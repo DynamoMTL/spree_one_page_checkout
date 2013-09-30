@@ -43,8 +43,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     let(:new_address) { double(:new_address) }
 
     before do
-      current_order.stub(:ship_address=)
-      current_order.stub(:save!)
+      current_order.stub(:update_attribute)
     end
 
     it "renders the :display state" do
@@ -56,10 +55,7 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     end
 
     it "assigns the new address as the order's shipping address" do
-      address_book_widget = root.find_widget(:opco_address_book)
-
-      expect(current_order).to receive(:ship_address=).with(new_address)
-      expect(current_order).to receive(:save!)
+      expect(current_order).to receive(:update_attribute).with(:ship_address, new_address)
 
       trigger!
     end

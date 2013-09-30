@@ -20,8 +20,7 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   end
 
   def address_created(event)
-    order.ship_address = event.data.fetch(:new_address)
-    order.save!
+    order.update_attribute(:ship_address, event.data.fetch(:new_address))
 
     trigger :address_chosen
 

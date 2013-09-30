@@ -43,13 +43,11 @@ module OnePageCheckout
       let(:shipping_method_id) { double(:shipping_method_id) }
 
       before do
-        current_order.stub(:shipping_method_id=)
-        current_order.stub(:save!)
+        current_order.stub(:update_attribute)
       end
 
       it "assigns the shipping-method to the order" do
-        expect(current_order).to receive(:shipping_method_id=).with(shipping_method_id)
-        expect(current_order).to receive(:save!)
+        expect(current_order).to receive(:update_attribute).with(:shipping_method_id, shipping_method_id)
 
         trigger!
       end

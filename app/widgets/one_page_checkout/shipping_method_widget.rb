@@ -20,8 +20,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   end
 
   def choose_shipping_method(event)
-    order.shipping_method_id = event.data.fetch(:shipping_method_id)
-    order.save!
+    order.update_attribute(:shipping_method_id, event.data.fetch(:shipping_method_id))
 
     replace state: :display
   end
