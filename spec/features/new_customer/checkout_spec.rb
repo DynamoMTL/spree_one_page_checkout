@@ -105,24 +105,24 @@ describe "A new customer", type: :feature, js: true do
         expect(order.payments.first.source.last_digits).to eq '1111'
       end
 
-      pending_further_implementation!
+      within '[data-hook=opco-payment-method]' do
+        within '[data-hook=opco-new-address]' do
+          click_on 'Add Address'
 
-        # within '[data-hook=opco-new-address]' do
-        #   click_on 'Add Address'
+          fill_in 'First Name', with: 'Guy'
+          fill_in 'Last Name', with: 'Incognito'
+          fill_in 'Address', with: '1234 Fake St.'
+          fill_in 'City', with: 'New York City'
+          select 'New York', from: 'State'
+          fill_in 'Zip Code', with: '10001'
+          fill_in 'Telephone', with: '555-555-1234'
 
-        #   fill_in 'First Name', with: 'Guy'
-        #   fill_in 'Last Name', with: 'Incognito'
-        #   fill_in 'Address', with: '1234 Fake St.'
-        #   fill_in 'City', with: 'New York City'
-        #   select 'New York', from: 'State'
-        #   fill_in 'Zip Code', with: '10001'
-        #   fill_in 'Telephone', with: '555-555-1234'
+          # Use the default country
+          # select 'United States', from: 'Country'
 
-        #   # Use the default country
-        #   # select 'United States', from: 'Country'
-
-        #   click_button 'Save'
-        # end
+          click_button 'Save'
+        end
+      end
 
       # FIXME Pretty self-explanatory
       sleep 2
@@ -130,10 +130,12 @@ describe "A new customer", type: :feature, js: true do
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.tap do |order|
         expect(order.bill_address.lastname).to match /Incognito/
-        expect(order.bill_address.address1).to match /1234 Fake St./
+        expect(order.bill_address.address1).to match /1234 Fake St/
 
         expect(order.payments).to have(1).item
       end
+
+      pending_further_implementation!
 
       # confirmation.confirm
       click_on 'Confirm My Order'
