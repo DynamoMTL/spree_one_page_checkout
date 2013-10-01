@@ -1,0 +1,7 @@
+<%= widget_div(data: { hook: 'opco-credit-card-wallet' }) do %>
+  <% @user.credit_cards.each do |credit_card| %>
+    <%= render_widget :credit_card_entry, :display, credit_card %>
+  <% end %>
+
+  <%= render_widget :new_credit_card_entry, :call_to_action %>
+<% end %>

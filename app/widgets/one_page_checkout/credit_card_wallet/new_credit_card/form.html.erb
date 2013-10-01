@@ -1,0 +1,25 @@
+<%= widget_div(data: { hook: 'opco-new-credit-card' }) do %>
+  <%= form_for credit_card_form, url: url_for_event(:create_credit_card), remote: true do |f| %>
+    <%= f.hidden_field :user_id, value: user.id %>
+
+    <%= f.label :number, t(:card_number) %>
+    <%= f.text_field :number %>
+
+    <%= label_tag :month, 'Expiration Month' %>
+    <%= select_month(Date.today,
+                     { use_month_numbers: true, field_name: :month, prefix: :credit_card },
+                     { id: 'month' }
+                    ) %>
+
+    <%= label_tag :year, 'Expiration Year' %>
+    <%= select_year(Date.today,
+                    { start_year: Date.today.year, end_year: Date.today.advance(years: 15).year, prefix: :credit_card, field_name: :year },
+                    { id: 'year'}
+                   ) %>
+
+    <%= f.label :verification_value, t(:verification_value) %>
+    <%= f.text_field :verification_value %>
+
+    <%= f.button 'Save' %>
+  <% end  %>
+<% end %>

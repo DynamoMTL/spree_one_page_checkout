@@ -79,9 +79,11 @@ describe "A new customer", type: :feature, js: true do
         expect(shipping_method).to eq shipping_method
       end
 
-      # credit_card.supply
+      # credit_card.create
       within '[data-hook=opco-payment-method]' do
-        within '[data-hook=opco-payment-details]' do
+        within '[data-hook=opco-new-credit-card]' do
+          click_on 'Add Credit Card'
+
           fill_in 'Card Number', with: '4111111111111111'
           select '1', from: 'Expiration Month'
           select '2015', from: 'Expiration Year'
@@ -89,29 +91,41 @@ describe "A new customer", type: :feature, js: true do
 
           click_button 'Save'
         end
-
-        within '[data-hook=opco-new-address]' do
-          click_on 'Add Address'
-
-          fill_in 'First Name', with: 'Guy'
-          fill_in 'Last Name', with: 'Incognito'
-          fill_in 'Address', with: '1234 Fake St.'
-          fill_in 'City', with: 'New York City'
-          select 'New York', from: 'State'
-          fill_in 'Zip Code', with: '10001'
-          fill_in 'Telephone', with: '555-555-1234'
-
-          # Use the default country
-          # select 'United States', from: 'Country'
-
-          click_button 'Save'
-        end
       end
+
+      expect(current_path).to eq '/checkout'
+
+      within '[data-hook=opco-payment-method]' do
+        expect(page).to have_css('[data-hook=opco-existing-credit-card]', count: 1, text: /xxxx-xxxx-xxxx-1111/i)
+        expect(page).to have_css('[data-hook=opco-new-credit-card]', count: 1)
+      end
+
+      current_order.reload.tap do |order|
+        expect(order.payments).to have(1).item
+        expect(order.payments.first.source.last_digits).to eq '1111'
+      end
+
+      pending_further_implementation!
+
+        # within '[data-hook=opco-new-address]' do
+        #   click_on 'Add Address'
+
+        #   fill_in 'First Name', with: 'Guy'
+        #   fill_in 'Last Name', with: 'Incognito'
+        #   fill_in 'Address', with: '1234 Fake St.'
+        #   fill_in 'City', with: 'New York City'
+        #   select 'New York', from: 'State'
+        #   fill_in 'Zip Code', with: '10001'
+        #   fill_in 'Telephone', with: '555-555-1234'
+
+        #   # Use the default country
+        #   # select 'United States', from: 'Country'
+
+        #   click_button 'Save'
+        # end
 
       # FIXME Pretty self-explanatory
       sleep 2
-
-      expect(current_path).to eq '/checkout'
 
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.tap do |order|
@@ -120,8 +134,6 @@ describe "A new customer", type: :feature, js: true do
 
         expect(order.payments).to have(1).item
       end
-
-      pending_further_implementation!
 
       # confirmation.confirm
       click_on 'Confirm My Order'
