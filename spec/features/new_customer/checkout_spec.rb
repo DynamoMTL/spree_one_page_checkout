@@ -61,7 +61,7 @@ describe "A new customer", type: :feature, js: true do
         expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
       end
 
-      # (Temporary) DMA expectations to motivate integration with orders
+      # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.ship_address.tap do |shipping_address|
         expect(shipping_address.lastname).to match /Incognito/
         expect(shipping_address.address1).to match /1234 Fake St/
@@ -74,6 +74,7 @@ describe "A new customer", type: :feature, js: true do
 
       expect(current_path).to eq '/checkout'
 
+      # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.shipping_method.tap do |shipping_method|
         expect(shipping_method).to eq shipping_method
       end
@@ -105,10 +106,12 @@ describe "A new customer", type: :feature, js: true do
         end
       end
 
+      # FIXME Pretty self-explanatory
       sleep 2
 
       expect(current_path).to eq '/checkout'
 
+      # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.tap do |order|
         expect(order.bill_address.lastname).to match /Incognito/
         expect(order.bill_address.address1).to match /1234 Fake St./
