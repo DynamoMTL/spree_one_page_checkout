@@ -1,6 +1,6 @@
 module Extensions
   module Spree
-    module Address
+    module CreditCard
       extend ActiveSupport::Concern
 
       included do
@@ -12,4 +12,4 @@ module Extensions
   end
 end
 
-::Spree::Address.send(:include, ::Extensions::Spree::Address)
+::Spree::CreditCard.send(:include, ::Extensions::Spree::CreditCard)
