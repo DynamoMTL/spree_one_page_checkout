@@ -31,15 +31,8 @@ module OnePageCheckout
       trigger :billing_address_updated
     end
 
-    # FIXME Extract to service
     def create_payment_using_credit_card(event)
-      payment = order.payments.create!({
-        amount: order.total,
-        payment_method_id: Spree::PaymentMethod.first.id,
-        source: event.data.fetch(:credit_card)
-      }, without_protection: true)
-
-      if payment
+      if payment = create_payment_service.call(order.total, event.data.fetch(:credit_card))
         trigger :payment_created, payment: payment
       else
         replace state: :display
@@ -49,5 +42,9 @@ module OnePageCheckout
     private
 
     attr_reader :order
+
+    def create_payment_service
+      @_create_payment_service = CreatePaymentFactory.build(order)
+    end
   end
 end

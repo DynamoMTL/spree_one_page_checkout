@@ -57,48 +57,29 @@ module OnePageCheckout
 
       let(:payment_method_widget) { root.find_widget(:opco_payment_method) }
 
-      # let(:payment_form) { double(:payment_form) }
-      # let(:create_payment_service) { double(:create_payment_service)}
-
+      let(:create_payment_service) { double(:create_payment_service)}
       let(:new_credit_card) { double(:new_credit_card) }
-
       let(:new_payment) { double(:new_payment) }
-
       let(:order_total) { double(:order_total) }
 
-      let(:payment_source_attrs) { double(:payment_source_attrs).as_null_object }
-      let(:payments_collection) { double(:payments_collection) }
-      let(:payment_method) { double(:payment_method, id: payment_method_id) }
-      let(:payment_method_id) { double(:payment_method_id) }
-
       before do
-        # CreatePaymentFactory.stub(:build).and_return(create_payment_service)
-        # Forms::PaymentForm.stub(:new).and_return(payment_form)
-        Spree::PaymentMethod.stub(:first).and_return(payment_method)
+        CreatePaymentFactory.stub(:build).with(current_order).and_return(create_payment_service)
 
-        # payment_method_widget.stub(:replace)
-        # payment_method_widget.stub(:trigger)
-        # create_payment_service.stub(:call)
-        current_order.stub(:payments).and_return(payments_collection)
+        create_payment_service.stub(:call)
         current_order.stub(:total).and_return(order_total)
+      end
+
+      it "attempts to create a new payment on the order" do
+        expect(create_payment_service).to receive(:call).with(order_total, new_credit_card)
+
+        trigger!
       end
 
       context "with a valid payment submission" do
         register_widget
 
         before do
-          # create_payment_service.stub(:call).and_return(new_payment)
-          payments_collection.stub(:create!).and_return(new_payment)
-        end
-
-        it "creates a new payment on the order" do
-          expect(payments_collection).to receive(:create!) do |payment_attrs|
-            expect(payment_attrs[:amount]).to eq order_total
-            expect(payment_attrs[:payment_method_id]).to eq payment_method_id
-            expect(payment_attrs[:source]).to eq new_credit_card
-          end
-
-          trigger!
+          create_payment_service.stub(:call).and_return(new_payment)
         end
 
         it "triggers a :payment_created event" do
@@ -112,8 +93,7 @@ module OnePageCheckout
         register_widget
 
         before do
-          # create_payment_service.stub(:call).and_return(false)
-          payments_collection.stub(:create!).and_return(false)
+          create_payment_service.stub(:call).and_return(false)
         end
 
         it "redraws the :display state" do
