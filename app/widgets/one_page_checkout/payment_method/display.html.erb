@@ -1,23 +1,25 @@
 <%= widget_div(data: { hook: 'opco-payment-method' }) do %>
   <div data-hook="opco-payment-details">
-    <%= form_for :payment_source, url: '#' do |f| %>
+    <%= form_for :payment_source, url: url_for_event(:create_payment), remote: true do |f| %>
       <%= f.label :card_number, t(:card_number) %>
       <%= f.text_field :card_number %>
 
       <%= label_tag :expiration_month, 'Expiration Month' %>
       <%= select_month(Date.today,
-                       { use_month_numbers: true, field_name: :expiration_month },
+                       { use_month_numbers: true, field_name: :expiration_month, prefix: :payment_source },
                        { id: 'expiration_month' }
                       ) %>
 
       <%= label_tag :expiration_year, 'Expiration Year' %>
       <%= select_year(Date.today,
-                      { start_year: Date.today.year, end_year: Date.today.advance(years: 15).year, field_name: :expiration_year },
+                      { start_year: Date.today.year, end_year: Date.today.advance(years: 15).year, prefix: :payment_source, field_name: :expiration_year },
                       { id: 'expiration_year'}
                      ) %>
 
       <%= f.label :verification_value, t(:verification_value) %>
       <%= f.text_field :verification_value %>
+
+      <%= f.button 'Save' %>
     <% end %>
   </div>
 

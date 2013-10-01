@@ -86,6 +86,8 @@ describe "A new customer", type: :feature, js: true do
           select '1', from: 'Expiration Month'
           select '2015', from: 'Expiration Year'
           fill_in 'Verification Value', with: '123'
+
+          click_button 'Save'
         end
 
         within '[data-hook=opco-new-address]' do
