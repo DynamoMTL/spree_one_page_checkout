@@ -1,5 +1,3 @@
-require 'pry'
-
 class CreatePayment
   def initialize(payment_factory, payment_method)
     @payment_factory = payment_factory
