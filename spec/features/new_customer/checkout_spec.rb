@@ -36,9 +36,9 @@ describe "A new customer", type: :feature, js: true do
 
       # address.supply
       within '[data-hook=opco-shipping-address]' do
-        click_on 'Add Address'
+        within '[data-hook=opco-new-address]' do
+          click_on 'Add Address'
 
-        within '[data-hook=opco-new-address] form' do
           fill_in 'First Name', with: 'Guy'
           fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
@@ -87,9 +87,9 @@ describe "A new customer", type: :feature, js: true do
           fill_in 'Verification Value', with: '123'
         end
 
-        click_on 'Add Address'
-
         within '[data-hook=opco-new-address]' do
+          click_on 'Add Address'
+
           fill_in 'First Name', with: 'Guy'
           fill_in 'Last Name', with: 'Incognito'
           fill_in 'Address', with: '1234 Fake St.'
