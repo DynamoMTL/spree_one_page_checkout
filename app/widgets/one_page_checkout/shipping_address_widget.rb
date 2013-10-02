@@ -7,6 +7,7 @@ module OnePageCheckout
     end
 
     responds_to_event :address_created, with: :assign_address_to_order
+    responds_to_event :select_address, with: :assign_address_to_order
 
     def initialize(parent, id, options = {})
       super(parent, id, options)
@@ -20,7 +21,9 @@ module OnePageCheckout
 
     def assign_address_to_order(event)
       # FIXME Exposes internal structure of Order
-      order.update_attribute(:ship_address, event.data.fetch(:new_address))
+      address = Spree::Address.find(event.data.fetch(:new_address))
+
+      order.update_attribute(:ship_address, address)
 
       trigger :shipping_address_updated
     end

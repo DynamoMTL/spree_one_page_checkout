@@ -39,9 +39,19 @@ describe "An existing customer", type: :feature, js: true do
 
       expect(current_path).to eq '/checkout'
 
+      # FIXME (Temporary) DMA object
+      current_order = Spree::User.first.orders.first
+
       within '[data-hook=opco-shipping-address]' do
         expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /742 Evergreen Terrace/)
         expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      end
+
+      within '[data-hook=opco-shipping-address]' do
+        find('[data-hook=opco-existing-address] a', text: /742 Evergreen Terrace/).click
+
+        expect(page).to have_css('[data-hook=opco-existing-address].selected')
+        expect(current_order.reload.ship_address.address1).to match /742 Evergreen Terrace/
       end
 
       pending "further implementation"
