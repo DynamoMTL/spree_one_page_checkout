@@ -1,6 +1,6 @@
 <%= widget_div(data: { hook: 'opco-address-book' }) do %>
   <% @user.addresses.each do |address| %>
-    <%= render_widget existing_address_widget_id, :display, address, is_selected?(address) %>
+    <%= render_widget existing_address_widget_id, :display, address %>
   <% end %>
 
   <%= render_widget new_address_widget_id, :call_to_action %>

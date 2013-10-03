@@ -10,7 +10,6 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   end
 
   responds_to_event :address_created
-  responds_to_event :shipping_address_updated, with: :redraw, passing: :root
 
   def initialize(parent, id, options = {})
     super(parent, id, options)
@@ -28,29 +27,10 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
     replace state: :display
   end
 
-  def redraw
-    replace state: :display
-  end
-
   private
 
   attr_reader :order
-  helper_method :is_selected?, :existing_address_widget_id, :new_address_widget_id
-
-  def current_address
-    case prefix.to_s
-    when 'billing'
-      order.reload.bill_address
-    when 'shipping'
-      order.reload.ship_address
-    else
-      nil
-    end
-  end
-
-  def is_selected?(address)
-    current_address == address
-  end
+  helper_method :existing_address_widget_id, :new_address_widget_id
 
   def existing_address_widget_id
     :"#{prefix}_address_book_entry"

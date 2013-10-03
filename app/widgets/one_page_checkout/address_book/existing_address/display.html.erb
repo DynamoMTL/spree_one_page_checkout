@@ -1,5 +1,5 @@
-<%= widget_div(data: { hook: 'opco-existing-address'}, class: css_classes) do %>
+<%= widget_div(data: { hook: 'opco-existing-address'}) do %>
   <address>
-    <%= link_to @address.to_s, url_for_event(:select_address, new_address: @address), remote: true %>
+    <%= @address.to_s %>
   </address>
 <% end %>
