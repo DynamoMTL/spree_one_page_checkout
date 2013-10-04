@@ -16,6 +16,7 @@ module OnePageCheckout
     def initialize(parent, id, options = {})
       super(parent, id, options)
 
+      @address_repository = options.fetch(:address_repository, Spree::Address)
       @order = options.fetch(:order)
       @user = options.fetch(:user)
     end
@@ -25,10 +26,12 @@ module OnePageCheckout
     end
 
     def assign_address_to_order(event)
-      # FIXME Exposes internal structure of Order
-      order.update_attribute(:bill_address, event.data.fetch(:new_address))
+      address = address_repository.find(event.data.fetch(:address))
 
-      trigger :billing_address_updated
+      # FIXME Exposes internal structure of Order
+      order.update_attribute(:bill_address, address)
+
+      trigger :billing_address_updated, address: address
     end
 
     def create_payment_using_credit_card(event)
@@ -41,7 +44,7 @@ module OnePageCheckout
 
     private
 
-    attr_reader :order
+    attr_reader :address_repository, :order
 
     def create_payment_service
       @_create_payment_service = CreatePaymentFactory.build(order)

@@ -10,6 +10,7 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   end
 
   responds_to_event :address_created
+  responds_to_event :shipping_address_updated, passing: :root
 
   def initialize(parent, id, options = {})
     super(parent, id, options)
@@ -19,7 +20,9 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
     @user   = options.fetch(:user)
   end
 
-  def display
+  def display(current_address = nil)
+    @current_address = current_address
+
     render
   end
 
@@ -27,10 +30,20 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
     replace state: :display
   end
 
+  def shipping_address_updated(event)
+    replace({state: :display}, event.data.fetch(:address))
+  end
+
   private
 
-  attr_reader :order
-  helper_method :existing_address_widget_id, :new_address_widget_id
+  attr_reader :current_address, :order
+  helper_method :css_classes_for, :existing_address_widget_id, :new_address_widget_id
+
+  def css_classes_for(address)
+    [].tap do |classes|
+      classes << 'selected' if current_address == address
+    end
+  end
 
   def existing_address_widget_id
     :"#{prefix}_address_book_entry"

@@ -63,7 +63,7 @@ describe OnePageCheckout::AddressBook::NewAddressWidget do
       end
 
       it "triggers a :address_created event" do
-        expect(address_widget).to receive(:trigger).with(:address_created, new_address: new_address)
+        expect(address_widget).to receive(:trigger).with(:address_created, address: new_address)
 
         trigger!
       end

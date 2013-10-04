@@ -50,7 +50,7 @@ describe "An existing customer", type: :feature, js: true do
       within '[data-hook=opco-shipping-address]' do
         find('[data-hook=opco-existing-address] a', text: /742 Evergreen Terrace/).click
 
-        expect(page).to have_css('[data-hook=opco-existing-address].selected')
+        expect(page).to have_css('[data-hook=opco-address-book] .selected')
         expect(current_order.reload.ship_address.address1).to match /742 Evergreen Terrace/
       end
 

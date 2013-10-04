@@ -2,7 +2,12 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/address_book/panel', :opco_address_book, user: current_user, order: current_order)
+    root << widget('one_page_checkout/address_book/panel',
+                   :opco_address_book,
+                   address_repository: address_repository,
+                   user: current_user,
+                   order: current_order,
+                  )
   end
 end
 
@@ -11,8 +16,9 @@ describe OnePageCheckout::AddressBook::PanelWidget do
 
   let!(:address_book_widget) { root.find_widget(:opco_address_book) }
 
-  let(:current_user) { create(:user) }
-  let(:current_order) { create(:order) }
+  let(:address_repository) { double(:address_repository) }
+  let(:current_user) { double(:user, addresses: []) }
+  let(:current_order) { double(:order) }
 
   let(:rendered) { render_widget(:opco_address_book, :display) }
 
@@ -27,12 +33,32 @@ describe OnePageCheckout::AddressBook::PanelWidget do
   context "with addresses in the current user's address-book" do
     register_widget
 
+    let(:address1) { double(:address1) }
+    let(:address2) { double(:address2) }
+    let(:addresses) {[ address1, address2 ]}
+
     before do
-      create_list(:address, 2, user: current_user)
+      current_user.stub(:addresses).and_return(addresses)
     end
 
     it "renders an address-book entry for each address" do
       expect(rendered).to have_selector('[data-hook=opco-existing-address]', count: 2)
+    end
+
+    context "when a currently selected address is present" do
+      register_widget
+
+      let(:rendered) { render_widget(:opco_address_book, :display, selected_address) }
+      let(:selected_address) { double(:selected_address) }
+
+      before do
+        selected_address.stub(:==).with(address1).and_return(true)
+        selected_address.stub(:==).with(address2).and_return(false)
+      end
+
+      it "applies a CSS class to the corresponding address-book entry" do
+        expect(rendered).to have_selector('[data-hook=opco-address-book] > li.selected', count: 1)
+      end
     end
   end
 
@@ -51,7 +77,31 @@ describe OnePageCheckout::AddressBook::PanelWidget do
     end
 
     def trigger!
-      trigger(:address_created, :opco_address_book, new_address: new_address)
+      trigger(:address_created, :opco_address_book, address: new_address)
+    end
+  end
+
+  context "when receiving a :shipping_address_updated event" do
+    register_widget
+
+    let(:address) { double(:address) }
+    let(:address_book_widget) { root.find_widget(:opco_address_book) }
+
+    before do
+      address_book_widget.stub(:replace)
+    end
+
+    it "redraws the widget" do
+      expect(address_book_widget).to receive(:replace) do |with, payload|
+        expect(with).to eq state: :display
+        expect(payload).to eq address
+      end
+
+      trigger!
+    end
+
+    def trigger!
+      trigger(:shipping_address_updated, :opco_address_book, address: address)
     end
   end
 end

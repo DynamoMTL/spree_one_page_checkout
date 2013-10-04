@@ -2,7 +2,12 @@ require 'spec_helper'
 
 def register_widget
   has_widgets do |root|
-    root << widget('one_page_checkout/payment_method', :opco_payment_method, user: current_user, order: current_order)
+    root << widget('one_page_checkout/payment_method',
+                   :opco_payment_method,
+                   address_repository: address_repository,
+                   user: current_user,
+                   order: current_order
+                  )
   end
 end
 
@@ -10,6 +15,7 @@ module OnePageCheckout
   describe PaymentMethodWidget do
     register_widget
 
+    let(:address_repository) { double(:address_repository) }
     let(:current_user) { double(:current_user, addresses: [], credit_cards: []) }
     let(:current_order) { double(:current_order) }
 
@@ -32,6 +38,7 @@ module OnePageCheckout
       let(:new_address) { double(:new_address) }
 
       before do
+        address_repository.stub(:find).with(new_address).and_return(new_address)
         current_order.stub(:update_attribute)
       end
 
@@ -42,13 +49,13 @@ module OnePageCheckout
       end
 
       it "triggers a :billing_address_updated event" do
-        expect(payment_method_widget).to receive(:trigger).with(:billing_address_updated)
+        expect(payment_method_widget).to receive(:trigger).with(:billing_address_updated, address: new_address)
 
         trigger!
       end
 
       def trigger!
-        trigger(:address_created, :opco_payment_method, new_address: new_address)
+        trigger(:address_created, :opco_payment_method, address: new_address)
       end
     end
 
