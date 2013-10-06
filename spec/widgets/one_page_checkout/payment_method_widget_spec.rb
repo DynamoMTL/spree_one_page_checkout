@@ -59,6 +59,34 @@ module OnePageCheckout
       end
     end
 
+    context "when receiving an :assign_address event" do
+      register_widget
+
+      let(:new_address) { double(:new_address) }
+      let(:payment_method_widget) { root.find_widget(:opco_payment_method) }
+
+      before do
+        address_repository.stub(:find).with(new_address).and_return(new_address)
+        current_order.stub(:update_attribute)
+      end
+
+      it "assigns the new address as the order's billing address" do
+        expect(current_order).to receive(:update_attribute).with(:bill_address, new_address)
+
+        trigger!
+      end
+
+      it "triggers a :billing_address_updated event" do
+        expect(payment_method_widget).to receive(:trigger).with(:billing_address_updated, address: new_address)
+
+        trigger!
+      end
+
+      def trigger!
+        trigger(:assign_address, :opco_payment_method, address: new_address)
+      end
+    end
+
     context "when receiving a :credit_card_created event" do
       register_widget
 

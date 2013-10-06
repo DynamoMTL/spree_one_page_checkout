@@ -11,6 +11,7 @@ module OnePageCheckout
     end
 
     responds_to_event :address_created, with: :assign_address_to_order
+    responds_to_event :assign_address, with: :assign_address_to_order
     responds_to_event :credit_card_created, with: :create_payment_using_credit_card
 
     def initialize(parent, id, options = {})
