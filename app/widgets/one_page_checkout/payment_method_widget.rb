@@ -22,7 +22,9 @@ module OnePageCheckout
       @user = options.fetch(:user)
     end
 
-    def display
+    def display(current_address = nil)
+      @current_address = current_address
+
       render
     end
 
@@ -45,7 +47,8 @@ module OnePageCheckout
 
     private
 
-    attr_reader :address_repository, :order
+    attr_reader :address_repository, :current_address, :order
+    helper_method :current_address
 
     def create_payment_service
       @_create_payment_service = CreatePaymentFactory.build(order)

@@ -1,4 +1,4 @@
 <%= widget_div(data: { hook: 'opco-payment-method' }) do %>
   <%= render_widget :opco_credit_card_wallet, :display %>
-  <%= render_widget :opco_billing_address_book, :display %>
+  <%= render_widget :opco_billing_address_book, :display, current_address %>
 <% end %>
