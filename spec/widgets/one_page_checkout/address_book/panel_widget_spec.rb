@@ -64,8 +64,8 @@ module OnePageCheckout::AddressBook
         let(:selected_address) { double(:selected_address) }
 
         before do
-          selected_address.stub(:==).with(address1).and_return(true)
-          selected_address.stub(:==).with(address2).and_return(false)
+          selected_address.stub(:eql?).with(address1).and_return(true)
+          selected_address.stub(:eql?).with(address2).and_return(false)
         end
 
         it "applies a CSS class to the corresponding address-book entry" do

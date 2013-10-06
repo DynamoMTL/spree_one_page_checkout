@@ -57,6 +57,7 @@ describe "A new customer", type: :feature, js: true do
       expect(current_path).to eq '/checkout'
 
       within '[data-hook=opco-shipping-address]' do
+        expect(page).to have_css('[data-hook=opco-address-book] .selected', count: 1, text: /1234 Fake St/)
         expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /1234 Fake St/)
         expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
       end
@@ -124,8 +125,11 @@ describe "A new customer", type: :feature, js: true do
         end
       end
 
-      # FIXME Pretty self-explanatory
-      sleep 2
+      within '[data-hook=opco-payment-method]' do
+        expect(page).to have_css('[data-hook=opco-address-book] .selected', count: 1, text: /1234 Fake St/)
+        expect(page).to have_css('[data-hook=opco-existing-address]', count: 2, text: /1234 Fake St/)
+        expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      end
 
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.tap do |order|

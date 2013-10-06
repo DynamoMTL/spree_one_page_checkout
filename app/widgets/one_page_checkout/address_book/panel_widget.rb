@@ -36,7 +36,7 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
 
   def css_classes_for(address)
     [].tap do |classes|
-      classes << 'selected' if current_address == address
+      classes << 'selected' if current_address.eql? address
     end
   end
 end
