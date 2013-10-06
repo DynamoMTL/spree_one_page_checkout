@@ -5,7 +5,7 @@ module OnePageCheckout
                       :opco_credit_card_wallet,
                       options.slice(:order, :user))
 
-      panel << widget('one_page_checkout/address_book/panel',
+      panel << widget('one_page_checkout/billing_address_book/panel',
                       :opco_billing_address_book,
                       options.slice(:order, :user).merge(prefix: :billing))
     end

@@ -1,11 +1,11 @@
 <%= widget_div(tag: :ul, data: { hook: 'opco-address-book' }) do %>
   <%= @user.addresses.each do |address| %>
     <%= content_tag(:li, class: css_classes_for(address)) do %>
-      <%= render_widget :address_book_entry, :display, address %>
+      <%= render_widget :shipping_address_book_entry, :display, address %>
     <% end %>
   <% end %>
 
   <%= content_tag(:li) do %>
-    <%= render_widget :new_address_book_entry, :call_to_action %>
+    <%= render_widget :new_shipping_address_book_entry, :call_to_action %>
   <% end %>
 <% end %>
