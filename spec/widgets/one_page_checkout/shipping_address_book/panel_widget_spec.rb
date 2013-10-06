@@ -58,5 +58,21 @@ module OnePageCheckout::ShippingAddressBook
         trigger(:shipping_address_updated, :opco_shipping_address_book, address: address)
       end
     end
+
+    context "when receiving a :billing_address_updated event" do
+      register_widget
+
+      it "redraws the widget" do
+        expect(panel_widget).to receive(:replace) do |with, payload|
+          expect(with).to eq state: :display
+        end
+
+        trigger!
+      end
+
+      def trigger!
+        trigger(:billing_address_updated, :opco_shipping_address_book, address: double)
+      end
+    end
   end
 end

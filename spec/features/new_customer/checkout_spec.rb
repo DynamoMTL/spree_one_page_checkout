@@ -62,6 +62,13 @@ describe "A new customer", type: :feature, js: true do
         expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
       end
 
+      # Set expectation that both address books are updated
+      within '[data-hook=opco-payment-method]' do
+        expect(page).to_not have_css('[data-hook=opco-address-book] .selected')
+        expect(page).to have_css('[data-hook=opco-existing-address]', count: 1, text: /1234 Fake St/)
+        expect(page).to have_css('[data-hook=opco-new-address]', count: 1)
+      end
+
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.ship_address.tap do |shipping_address|
         expect(shipping_address.lastname).to match /Incognito/
