@@ -26,6 +26,7 @@ module OnePageCheckout
 
       # FIXME Exposes internal structure of Order
       order.update_attribute(:ship_address, address)
+      order.create_tax_charge!
 
       trigger(:shipping_address_updated, { address: address })
     end

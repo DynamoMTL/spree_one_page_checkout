@@ -36,6 +36,7 @@ module OnePageCheckout
       before do
         address_repository.stub(:find).with(new_address).and_return(new_address)
         current_order.stub(:update_attribute)
+        current_order.stub(:create_tax_charge!)
       end
 
       it "assigns the new address as the order's shipping address" do
@@ -46,6 +47,12 @@ module OnePageCheckout
 
       it "triggers a :shipping_address_updated event" do
         expect(shipping_address_widget).to receive(:trigger).with(:shipping_address_updated, address: new_address)
+
+        trigger!
+      end
+
+      it "applies a tax adjustment to the order" do
+        expect(current_order).to receive(:create_tax_charge!).once
 
         trigger!
       end
@@ -64,6 +71,7 @@ module OnePageCheckout
       before do
         address_repository.stub(:find).with(new_address).and_return(new_address)
         current_order.stub(:update_attribute)
+        current_order.stub(:create_tax_charge!)
       end
 
       it "assigns the new address as the order's shipping address" do
