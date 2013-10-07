@@ -14,14 +14,12 @@ class OnePageCheckout::AddressBook::PanelWidget < Apotomo::Widget
   def initialize(parent, id, options = {})
     super(parent, id, options)
 
-    @order  = options.fetch(:order)
-    @prefix = options.fetch(:prefix, 'generic')
-    @user   = options.fetch(:user)
+    @current_address = options.fetch(:current_address)
+    @order           = options.fetch(:order)
+    @user            = options.fetch(:user)
   end
 
-  def display(current_address = nil)
-    @current_address = current_address
-
+  def display
     render
   end
 

@@ -13,14 +13,10 @@ module OnePageCheckout
     responds_to_event :shipping_address_updated, passing: :root
     responds_to_event :billing_address_updated, passing: :root
 
-    def display(current_address = nil)
-      @current_address = current_address
-
-      render
-    end
-
     def shipping_address_updated(event)
-      replace({state: :display}, event.data.fetch(:address))
+      @current_address = event.data.fetch(:address)
+
+      replace state: :display
     end
 
     def billing_address_updated(event)

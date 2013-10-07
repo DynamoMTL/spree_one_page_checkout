@@ -5,9 +5,9 @@ def register_widget
     root << widget('one_page_checkout/payment_method',
                    :opco_payment_method,
                    address_repository: address_repository,
-                   user: current_user,
-                   order: current_order
-                  )
+                   current_address: current_address,
+                   order: current_order,
+                   user: current_user)
   end
 end
 
@@ -16,8 +16,9 @@ module OnePageCheckout
     register_widget
 
     let(:address_repository) { double(:address_repository) }
-    let(:current_user) { double(:current_user, addresses: [], credit_cards: []) }
+    let(:current_address) { double(:current_address) }
     let(:current_order) { double(:current_order) }
+    let(:current_user) { double(:current_user, addresses: [], credit_cards: []) }
 
     let(:rendered) { render_widget(:opco_payment_method, :display) }
 

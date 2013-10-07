@@ -5,15 +5,17 @@ module OnePageCheckout::ShippingAddressBook
     class << self
       def register_widget
         let(:address_repository) { double(:address_repository) }
-        let(:current_user) { double(:user, addresses: []) }
+        let(:current_address) { double(:current_address) }
         let(:current_order) { double(:order) }
+        let(:current_user) { double(:user, addresses: []) }
 
         has_widgets do |root|
           root << widget('one_page_checkout/shipping_address_book/panel',
                          :opco_shipping_address_book,
                          address_repository: address_repository,
-                         user: current_user,
-                         order: current_order)
+                         current_address: current_address,
+                         order: current_order,
+                         user: current_user)
         end
       end
     end
@@ -48,7 +50,7 @@ module OnePageCheckout::ShippingAddressBook
       it "redraws the widget" do
         expect(panel_widget).to receive(:replace) do |with, payload|
           expect(with).to eq state: :display
-          expect(payload).to eq address
+          expect(payload).to be_nil
         end
 
         trigger!

@@ -3,7 +3,7 @@ module OnePageCheckout
     has_widgets do |panel|
       panel << widget('one_page_checkout/shipping_address_book/panel',
                       :opco_shipping_address_book,
-                      options.slice(:order, :user).merge(prefix: :shipping))
+                      options.slice(:current_address, :order, :user))
     end
 
     responds_to_event :address_created, with: :assign_address_to_order
@@ -13,12 +13,11 @@ module OnePageCheckout
       super(parent, id, options)
 
       @address_repository = options.fetch(:address_repository, Spree::Address)
+      @current_address = options.fetch(:current_address, nil)
       @order = options.fetch(:order)
     end
 
-    def display(current_address = nil)
-      @current_address = current_address
-
+    def display
       render
     end
 

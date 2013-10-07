@@ -1,28 +1,19 @@
 require 'spec_helper'
 
-# def register_widget
-#   has_widgets do |root|
-#     root << widget('one_page_checkout/address_book/panel',
-#                    :opco_address_book,
-#                    address_repository: address_repository,
-#                    user: current_user,
-#                    order: current_order,
-#                   )
-#   end
-# end
-# 
 module OnePageCheckout::AddressBook
   describe PanelWidget do
     class << self
       def register_widget
         let(:address_repository) { double(:address_repository) }
-        let(:current_user) { double(:user, addresses: []) }
+        let(:current_address) { double(:current_address) }
         let(:current_order) { double(:order) }
+        let(:current_user) { double(:user, addresses: []) }
 
         has_widgets do |root|
           root << widget('one_page_checkout/address_book/panel',
                          :opco_address_book,
                          address_repository: address_repository,
+                         current_address: current_address,
                          user: current_user,
                          order: current_order)
         end
@@ -60,12 +51,11 @@ module OnePageCheckout::AddressBook
       context "when a currently selected address is present" do
         register_widget
 
-        let(:rendered) { render_widget(:opco_address_book, :display, selected_address) }
-        let(:selected_address) { double(:selected_address) }
+        let(:rendered) { render_widget(:opco_address_book, :display) }
 
         before do
-          selected_address.stub(:eql?).with(address1).and_return(true)
-          selected_address.stub(:eql?).with(address2).and_return(false)
+          current_address.stub(:eql?).with(address1).and_return(true)
+          current_address.stub(:eql?).with(address2).and_return(false)
         end
 
         it "applies a CSS class to the corresponding address-book entry" do

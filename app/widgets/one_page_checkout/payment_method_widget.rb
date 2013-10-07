@@ -7,7 +7,7 @@ module OnePageCheckout
 
       panel << widget('one_page_checkout/billing_address_book/panel',
                       :opco_billing_address_book,
-                      options.slice(:order, :user).merge(prefix: :billing))
+                      options.slice(:current_address, :order, :user))
     end
 
     responds_to_event :address_created, with: :assign_address_to_order
@@ -18,23 +18,22 @@ module OnePageCheckout
       super(parent, id, options)
 
       @address_repository = options.fetch(:address_repository, Spree::Address)
+      @current_address = options.fetch(:current_address, nil)
       @order = options.fetch(:order)
       @user = options.fetch(:user)
     end
 
-    def display(current_address = nil)
-      @current_address = current_address
-
+    def display
       render
     end
 
     def assign_address_to_order(event)
-      address = address_repository.find(event.data.fetch(:address))
+      @current_address = address_repository.find(event.data.fetch(:address))
 
       # FIXME Exposes internal structure of Order
-      order.update_attribute(:bill_address, address)
+      order.update_attribute(:bill_address, current_address)
 
-      trigger :billing_address_updated, address: address
+      trigger :billing_address_updated, address: current_address
     end
 
     def create_payment_using_credit_card(event)
