@@ -5,12 +5,8 @@ module OnePageCheckout
     helper Spree::BaseHelper
     helper Spree::OrdersHelper
 
-    # has_widgets do
-    #   self << widget('one_page_checkout/order_summary/line_item', :opco_line_item)
-    # end
-
-    # responds_to_event :cart_updated, with: :redraw_adjustments, passing: :root
-    # responds_to_event :line_item_removed, with: :redraw_line_items, passing: :root
+    responds_to_event :shipping_address_updated, with: :redraw, passing: :root
+    responds_to_event :shipping_method_updated, with: :redraw, passing: :root
 
     def initialize(parent, id, options = {})
       super(parent, id, options)
