@@ -59,6 +59,12 @@ module OnePageCheckout
         trigger!
       end
 
+      it "triggers a :shipping_method_updated event" do
+        expect(shipping_method_widget).to receive(:trigger).with(:shipping_method_updated)
+
+        trigger!
+      end
+
       def trigger!
         trigger(:choose_shipping_method, :opco_shipping_method, shipping_method_id: shipping_method_id)
       end

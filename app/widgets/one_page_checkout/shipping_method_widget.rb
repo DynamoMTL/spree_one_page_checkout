@@ -26,7 +26,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
     order.update_attribute(:shipping_method_id, event.data.fetch(:shipping_method_id))
     order.create_shipment!
 
-    replace state: :display
+    trigger :shipping_method_updated
   end
 
   private
