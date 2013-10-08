@@ -149,6 +149,8 @@ describe "A new customer", type: :feature, js: true do
       # confirmation.confirm
       click_on 'Confirm My Order'
 
+      sleep 5
+
       expect(page).to have_content %r{ORDER #[0-9A-Z]+}
       expect(current_path).to match %r{/orders/[0-9A-Z]+}
 
