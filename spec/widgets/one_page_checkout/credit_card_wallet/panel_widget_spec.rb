@@ -60,11 +60,12 @@ describe OnePageCheckout::CreditCardWallet::PanelWidget do
     end
   end
 
-  context "when receiving an :credit_card_created event" do
+  context "when receiving a :payment_created event" do
     register_widget
 
     let(:credit_card_wallet_widget) { root.find_widget(:opco_credit_card_wallet) }
-    let(:new_credit_card) { double(:new_credit_card) }
+    let(:credit_card) { double(:credit_card) }
+    let(:payment) { double(:payment, source: credit_card) }
 
     it "renders the :display state" do
       expect(credit_card_wallet_widget).to receive(:replace) do |state_or_view, args|
@@ -75,7 +76,7 @@ describe OnePageCheckout::CreditCardWallet::PanelWidget do
     end
 
     def trigger!
-      trigger(:credit_card_created, :opco_credit_card_wallet, new_credit_card: new_credit_card)
+      trigger(:payment_created, :opco_credit_card_wallet, payment: payment)
     end
   end
 end
