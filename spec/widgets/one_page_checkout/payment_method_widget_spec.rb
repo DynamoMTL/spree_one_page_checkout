@@ -5,6 +5,7 @@ def register_widget
     root << widget('one_page_checkout/payment_method',
                    :opco_payment_method,
                    address_repository: address_repository,
+                   credit_card_repository: credit_card_repository,
                    current_address: current_address,
                    order: current_order,
                    user: current_user)
@@ -16,6 +17,7 @@ module OnePageCheckout
     register_widget
 
     let(:address_repository) { double(:address_repository) }
+    let(:credit_card_repository) { double(:credit_card_repository) }
     let(:current_address) { double(:current_address) }
     let(:current_order) { double(:current_order) }
     let(:current_user) { double(:current_user, addresses: [], credit_cards: []) }
@@ -145,5 +147,46 @@ module OnePageCheckout
         trigger(:credit_card_created, :opco_payment_method, credit_card: new_credit_card)
       end
     end
+
+    context "when receiving an :assign_credit_card event" do
+      register_widget
+
+      let(:payment_method_widget) { root.find_widget(:opco_payment_method) }
+
+      let(:create_payment_service) { double(:create_payment_service) }
+      let(:credit_card) { double(:credit_card) }
+      let(:credit_card_id) { double(:credit_card_id) }
+      let(:order_payments) { double(:order_payments) }
+      let(:order_total) { double(:order_total) }
+
+      before do
+        CreatePaymentFactory.stub(:build).with(current_order).and_return(create_payment_service)
+
+        create_payment_service.stub(:call)
+
+        credit_card_repository.stub(:find).with(credit_card_id).and_return(credit_card)
+        current_order.stub(:payments).and_return(order_payments)
+        current_order.stub(:total).and_return(order_total)
+
+        order_payments.stub(:destroy_all)
+      end
+
+      it "clears existing payments on the order" do
+        expect(order_payments).to receive(:destroy_all)
+
+        trigger!
+      end
+
+      it "creates a new payment on the order" do
+        expect(create_payment_service).to receive(:call).with(order_total, credit_card)
+
+        trigger!
+      end
+
+      def trigger!
+        trigger(:assign_credit_card, :opco_payment_method, credit_card: credit_card_id)
+      end
+    end
+
   end
 end

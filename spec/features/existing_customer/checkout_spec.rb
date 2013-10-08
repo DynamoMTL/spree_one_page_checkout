@@ -26,6 +26,14 @@ describe "An existing customer", type: :feature, js: true do
              phone: '939-555-0113',
              user: marge_simpson
             )
+
+      create(:credit_card,
+             number: 4111111111111111,
+             month: 12,
+             year: 2016,
+             verification_value: 123,
+             user: marge_simpson
+            )
     end
 
     it "completes a checkout" do
@@ -52,6 +60,19 @@ describe "An existing customer", type: :feature, js: true do
 
         expect(page).to have_css('[data-hook=opco-address-book] .selected')
         expect(current_order.reload.ship_address.address1).to match /742 Evergreen Terrace/
+      end
+
+      within '[data-hook=opco-payment-method]' do
+        save_and_open_page
+
+        find('[data-hook=opco-existing-credit-card] a', text: /1111/).click
+
+        # expect(page).to have_css('[data-hook=opco-credit-card-wallet] .selected')
+        sleep 5
+
+        current_order.reload.tap do |order|
+          expect(order.payments).to have(1).item
+        end
       end
 
       pending "further implementation"

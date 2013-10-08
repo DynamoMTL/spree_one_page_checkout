@@ -12,12 +12,14 @@ module OnePageCheckout
 
     responds_to_event :address_created, with: :assign_address_to_order
     responds_to_event :assign_address, with: :assign_address_to_order
+    responds_to_event :assign_credit_card
     responds_to_event :credit_card_created, with: :create_payment_using_credit_card
 
     def initialize(parent, id, options = {})
       super(parent, id, options)
 
       @address_repository = options.fetch(:address_repository, Spree::Address)
+      @credit_card_repository = options.fetch(:credit_card_repository, Spree::CreditCard)
       @current_address = options.fetch(:current_address, nil)
       @order = options.fetch(:order)
       @user = options.fetch(:user)
@@ -44,9 +46,17 @@ module OnePageCheckout
       end
     end
 
+    def assign_credit_card(event)
+      credit_card = credit_card_repository.find(event.data.fetch(:credit_card))
+
+      order.payments.destroy_all
+
+      trigger :credit_card_created, credit_card: credit_card
+    end
+
     private
 
-    attr_reader :address_repository, :current_address, :order
+    attr_reader :address_repository, :credit_card_repository, :current_address, :order
     helper_method :current_address
 
     def create_payment_service
