@@ -146,12 +146,15 @@ describe "A new customer", type: :feature, js: true do
         expect(order.payments).to have(1).item
       end
 
-      pending_further_implementation!
-
       # confirmation.confirm
       click_on 'Confirm My Order'
 
-      expect(page).to have_content "Your order was processed successfully."
+      expect(page).to have_content %r{ORDER #[0-9A-Z]+}
+      expect(current_path).to match %r{/orders/[0-9A-Z]+}
+
+      current_order.reload.tap do |order|
+        expect(order).to be_complete
+      end
     end
   end
 
