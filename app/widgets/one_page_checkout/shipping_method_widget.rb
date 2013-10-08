@@ -34,6 +34,11 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   attr_reader :order
   helper_method :shipping_method_options
 
+  def current_shipping_method
+    # FIXME Exposes internal structure of Order
+    order.shipping_method_id
+  end
+
   def shipping_methods
     # FIXME Exposes internal structure of Order
     @_shipping_methods ||= order.rate_hash
@@ -41,6 +46,6 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
 
   def shipping_method_options
     @_shipping_method_options ||=
-      options_from_collection_for_select(shipping_methods, :id, :name)
+      options_from_collection_for_select(shipping_methods, :id, :name, current_shipping_method)
   end
 end
