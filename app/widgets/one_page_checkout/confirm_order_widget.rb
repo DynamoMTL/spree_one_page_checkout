@@ -16,9 +16,7 @@ module OnePageCheckout
       # TODO Extract to service
       5.times { order.next }
 
-      order_completion_path = spree.order_path(order)
-
-      render text: "location.href = '#{order_completion_path}';"
+      redirect_to_completed_order_page if order.complete?
     end
 
     private
@@ -26,6 +24,7 @@ module OnePageCheckout
     attr_reader :order
 
     def redirect_to_completed_order_page
+      render text: "location.href = '#{spree.order_path(order)}';"
     end
 
     def spree
