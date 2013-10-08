@@ -63,12 +63,11 @@ describe "An existing customer", type: :feature, js: true do
       end
 
       within '[data-hook=opco-payment-method]' do
-        save_and_open_page
-
         find('[data-hook=opco-existing-credit-card] a', text: /1111/).click
 
-        # expect(page).to have_css('[data-hook=opco-credit-card-wallet] .selected')
         sleep 5
+
+        expect(page).to have_css('[data-hook=opco-credit-card-wallet] .selected')
 
         current_order.reload.tap do |order|
           expect(order.payments).to have(1).item

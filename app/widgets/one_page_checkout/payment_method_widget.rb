@@ -3,7 +3,7 @@ module OnePageCheckout
     has_widgets do |panel|
       panel << widget('one_page_checkout/credit_card_wallet/panel',
                       :opco_credit_card_wallet,
-                      options.slice(:order, :user))
+                      options.slice(:current_credit_card, :order, :user))
 
       panel << widget('one_page_checkout/billing_address_book/panel',
                       :opco_billing_address_book,
@@ -18,11 +18,12 @@ module OnePageCheckout
     def initialize(parent, id, options = {})
       super(parent, id, options)
 
-      @address_repository = options.fetch(:address_repository, Spree::Address)
+      @address_repository     = options.fetch(:address_repository, Spree::Address)
       @credit_card_repository = options.fetch(:credit_card_repository, Spree::CreditCard)
-      @current_address = options.fetch(:current_address, nil)
-      @order = options.fetch(:order)
-      @user = options.fetch(:user)
+      @current_address        = options.fetch(:current_address, nil)
+      @current_credit_card    = options.fetch(:current_credit_card, nil)
+      @order                  = options.fetch(:order)
+      @user                   = options.fetch(:user)
     end
 
     def display

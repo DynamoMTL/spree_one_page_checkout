@@ -10,7 +10,7 @@ module Extensions
           root << widget('one_page_checkout/order_summary', :opco_order_summary, user: spree_current_user, order: current_order, current_address: current_order.ship_address)
           root << widget('one_page_checkout/shipping_address', :opco_shipping_address, user: spree_current_user, order: current_order, current_address: current_order.ship_address)
           root << widget('one_page_checkout/shipping_method', :opco_shipping_method, user: spree_current_user, order: current_order)
-          root << widget('one_page_checkout/payment_method', :opco_payment_method, user: spree_current_user, order: current_order, current_address: current_order.bill_address)
+          root << widget('one_page_checkout/payment_method', :opco_payment_method, user: spree_current_user, order: current_order, current_address: current_order.bill_address, current_credit_card: current_order.payments.valid.first.try(:source))
           root << widget('one_page_checkout/confirm_order', :opco_confirm_order, order: current_order)
         end
 

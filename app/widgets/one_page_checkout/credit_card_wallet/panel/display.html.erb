@@ -1,7 +1,11 @@
-<%= widget_div(data: { hook: 'opco-credit-card-wallet' }) do %>
+<%= widget_div(tag: :ul, data: { hook: 'opco-credit-card-wallet' }) do %>
   <% @user.credit_cards.each do |credit_card| %>
-    <%= render_widget :credit_card_entry, :display, credit_card %>
+    <%= content_tag(:li, class: css_classes_for(credit_card)) do %>
+      <%= render_widget :credit_card_entry, :display, credit_card %>
+    <% end %>
   <% end %>
 
-  <%= render_widget :new_credit_card_entry, :call_to_action %>
+  <%= content_tag(:li) do %>
+    <%= render_widget :new_credit_card_entry, :call_to_action %>
+  <% end %>
 <% end %>
