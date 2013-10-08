@@ -34,6 +34,7 @@ module OnePageCheckout
 
         url_helpers.stub(:order_path).with(current_order).and_return(completed_order_path)
         current_order.stub(:next)
+        current_order.stub(:complete?)
       end
 
       it "completes the order" do
@@ -42,14 +43,22 @@ module OnePageCheckout
         trigger!
       end
 
-      it "redirects to the order-completion page" do
-        expect(url_helpers).to receive(:order_path).with(current_order)
+      context "with a successfully completed order" do
+        register_widget
 
-        expect(confirm_widget).to receive(:render) do |with, payload|
-          expect(with[:text]).to match /#{completed_order_path}/
+        before do
+          current_order.stub(:complete?).and_return(true)
         end
 
-        trigger!
+        it "redirects to the order-completion page" do
+          expect(url_helpers).to receive(:order_path).with(current_order)
+
+          expect(confirm_widget).to receive(:render) do |with, payload|
+            expect(with[:text]).to match /#{completed_order_path}/
+          end
+
+          trigger!
+        end
       end
 
       def trigger!
