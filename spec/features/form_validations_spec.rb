@@ -53,4 +53,38 @@ describe "A customer", type: :feature, js: true do
       end
     end
   end
+
+  context "when submitting invalid credit-card information" do
+    it "displays inline form-validation errors" do
+      visit spree.product_path(beef_slab)
+
+      # product.add_to_cart
+      click_button 'Add To Cart'
+
+      # cart.checkout
+      click_button 'Checkout'
+
+      # credit_card.create
+      within '[data-hook=opco-payment-method]' do
+        within '[data-hook=opco-new-credit-card]' do
+          click_on 'Add Credit Card'
+
+          fill_in 'Card Number', with: '4111111111111111'
+          select '1', from: 'Expiration Month'
+          select '2015', from: 'Expiration Year'
+          fill_in 'Verification Value', with: '123'
+
+          # Submit empty credit-card number and CVV
+          fill_in 'Card Number', with: ''
+          fill_in 'Verification Value', with: ''
+
+          click_button 'Save'
+        end
+      end
+
+      within '[data-hook=opco-payment-method]' do
+        expect(page).to have_content "can't be blank", count: 2
+      end
+    end
+  end
 end
