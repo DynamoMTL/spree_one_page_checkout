@@ -1,31 +1,19 @@
 <%= widget_div(data: { hook: 'opco-new-address' }) do %>
-  <%= form_for address_form, url: url_for_event(:create_address), remote: true do |f| %>
-    <%= f.hidden_field :user_id, value: user.id %>
+  <%= semantic_form_for address_form, url: url_for_event(:create_address), remote: true do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :user_id, hidden: true, input_html: { value: user.id } %>
+      <%= f.input :firstname, label: t(:first_name) %>
+      <%= f.input :lastname, label: t(:last_name) %>
+      <%= f.input :address1, label: t(:street_address) %>
+      <%= f.input :city, label: t(:city) %>
+      <%= f.input :state_name, as: :select, collection: ['New York'], label: t(:state) %>
+      <%= f.input :country_id, as: :select, collection: Spree::Country.all, label: t(:country) %>
+      <%= f.input :zipcode, label: t(:zip_code) %>
+      <%= f.input :phone, label: t(:telephone) %>
+    <%- end %>
 
-    <%= f.label :firstname, t(:first_name) %>
-    <%= f.text_field :firstname %>
-
-    <%= f.label :lastname, t(:last_name) %>
-    <%= f.text_field :lastname %>
-
-    <%= f.label :address1, t(:street_address) %>
-    <%= f.text_field :address1 %>
-
-    <%= f.label :city, t(:city) %>
-    <%= f.text_field :city %>
-
-    <%= f.label :state_name, t(:state) %>
-    <%= f.select :state_name, options_for_select(['New York']) %>
-
-    <%= f.label :country_id, t(:country) %>
-    <%= f.collection_select :country_id, Spree::Country.all, :id, :name, include_blank: false %>
-
-    <%= f.label :zipcode, t(:zip_code) %>
-    <%= f.text_field :zipcode %>
-
-    <%= f.label :phone, t(:telephone) %>
-    <%= f.text_field :phone %>
-
-    <%= f.button 'Save' %>
-  <% end  %>
+    <%= f.actions do %>
+      <%= f.action :submit, label: 'Save' %>
+    <% end %>
+  <% end %>
 <% end %>
