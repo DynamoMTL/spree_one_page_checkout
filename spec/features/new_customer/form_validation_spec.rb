@@ -34,7 +34,7 @@ describe "A new customer", type: :feature, js: true do
           fill_in 'Address', with: '1234 Fake St.'
           fill_in 'City', with: 'New York City'
           select 'New York', from: 'State'
-          fill_in 'Zip Code', with: '10001'
+          fill_in 'Zip', with: '10001'
           fill_in 'Telephone', with: '555-555-1234'
 
           # Use the default country
@@ -42,7 +42,7 @@ describe "A new customer", type: :feature, js: true do
 
           # Submit empty last name and zip-code
           fill_in 'Last Name', with: ''
-          fill_in 'Zip Code', with: ''
+          fill_in 'Zip', with: ''
 
           click_button 'Save'
         end
