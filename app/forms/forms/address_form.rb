@@ -15,6 +15,6 @@ module Forms
     )
 
     validates :firstname, :lastname, :address1,
-      :city, :country_id, :phone, presence: true
+      :city, :country_id, :zipcode, :phone, presence: true
   end
 end

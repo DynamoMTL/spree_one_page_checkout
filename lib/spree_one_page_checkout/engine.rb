@@ -1,6 +1,7 @@
 module SpreeOnePageCheckout
   class Engine < Rails::Engine
     require 'apotomo'
+    require 'formtastic'
     require 'reform'
 
     require 'spree/core'
