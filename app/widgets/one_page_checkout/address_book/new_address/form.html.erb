@@ -7,7 +7,7 @@
       <%= f.input :address1, label: t(:street_address) %>
       <%= f.input :city, label: t(:city) %>
       <%= f.input :state_name, as: :select, collection: ['New York'], label: t(:state) %>
-      <%= f.input :country_id, as: :select, collection: Spree::Country.all, label: t(:country) %>
+      <%= f.input :country_id, as: :select, collection: Spree::Country.all, label: t(:country), include_blank: false %>
       <%= f.input :zipcode, label: t(:zip_code) %>
       <%= f.input :phone, label: t(:telephone) %>
     <%- end %>
