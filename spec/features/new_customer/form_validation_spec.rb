@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 # In order to reduce confusion and thereby grease the wheels of commerce
-# As a customer
+# As a new customer
 # Homer Simpson submits invalid or incomplete information and receives instant feedback
 
-describe "A customer", type: :feature, js: true do
+describe "A new customer", type: :feature, js: true do
   before(:all) { configure_store }
 
   before do
