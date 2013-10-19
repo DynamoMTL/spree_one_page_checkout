@@ -25,6 +25,10 @@ module SpreeOnePageCheckout
       end
     end
 
+    initializer 'spree_one_page_checkout.setup_widget_view_paths', after: 'apotomo.setup_view_paths' do |app|
+      Apotomo::Widget.append_view_path self.root.join('app/widgets')
+    end
+
     config.to_prepare &method(:activate).to_proc
   end
 end
