@@ -1,8 +1,6 @@
 class AddUserIdToAddresses < ActiveRecord::Migration
   def change
-    change_table table_name do |t|
-      t.references :user
-    end
+    add_column table_name, :user_id, :integer
   end
 
   def migrate(direction)
