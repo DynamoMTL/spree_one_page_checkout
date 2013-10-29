@@ -24,6 +24,6 @@ class CreatePaymentFactory
   end
 
   def payment_method
-    Spree::PaymentMethod.first
+    Spree::PaymentMethod.available(:front_end).first
   end
 end
