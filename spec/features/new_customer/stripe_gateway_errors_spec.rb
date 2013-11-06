@@ -16,7 +16,34 @@ describe "A new customer", type: :feature, js: true do
 
   context "when adding a new credit card" do
     context "when the card is declined" do
-      it "displays the corresponding gateway error message"
+      it "displays the corresponding gateway error message" do
+        visit spree.product_path(beef_slab)
+
+        # product.add_to_cart
+        click_button 'Add To Cart'
+
+        # cart.checkout
+        click_button 'Checkout'
+
+        # credit_card.create
+        within '[data-hook=opco-payment-method]' do
+          within '[data-hook=opco-new-credit-card]' do
+            click_on 'Add Credit Card'
+
+            fill_in 'Card Number', with: '4000000000000002'
+            select '1', from: 'Expiration Month'
+            select '2015', from: 'Expiration Year'
+            fill_in 'Verification Value', with: '123'
+
+            click_button 'Save'
+          end
+        end
+
+        within '[data-hook=opco-payment-method]' do
+          expect(page).to have_content /Your card was declined/i
+        end
+      end
+
       it "doesn't persist the credit card"
     end
 
@@ -46,5 +73,5 @@ describe "A new customer", type: :feature, js: true do
       it "displays the corresponding gateway error message"
       it "retains the credit card"
     end
-end
+  end
 end
