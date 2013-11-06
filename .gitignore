@@ -16,3 +16,4 @@ spec/dummy
 .bundle
 zeus.json
 custom_plan.rb
+.env
