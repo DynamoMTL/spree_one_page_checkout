@@ -34,6 +34,11 @@ module OnePageCheckout
       expect(rendered).to have_selector("[data-hook=opco-payment-method] > [data-hook=opco-address-book]")
     end
 
+    it "renders the payment-gateway notifications panel" do
+      expect(rendered).to have_selector("[data-hook=opco-payment-method]")
+      expect(rendered).to have_selector("[data-hook=opco-payment-method] > [data-hook=opco-gateway-notifications]")
+    end
+
     context "when receiving an :address_created event" do
       register_widget
 
@@ -127,6 +132,7 @@ module OnePageCheckout
         end
       end
 
+      # TODO Under what conditions does this happen?
       context "with an invalid payment submission" do
         register_widget
 
@@ -143,6 +149,30 @@ module OnePageCheckout
         end
       end
 
+      context "with an invalid payment source" do
+        register_widget
+
+        let(:gateway_error) { Spree::Core::GatewayError }
+
+        before do
+          create_payment_service.stub(:call).and_raise(gateway_error)
+          new_credit_card.stub(:destroy)
+        end
+
+        it "destroys the new credit card" do
+          expect(new_credit_card).to receive(:destroy)
+
+          trigger!
+        end
+
+        it "triggers a :gateway_error_raised event" do
+          expect(payment_method_widget).to receive(:trigger)
+            .with(:gateway_error_raised, gateway_error: an_instance_of(gateway_error))
+
+          trigger!
+        end
+      end
+
       def trigger!
         trigger(:credit_card_created, :opco_payment_method, credit_card: new_credit_card)
       end
@@ -153,22 +183,15 @@ module OnePageCheckout
 
       let(:payment_method_widget) { root.find_widget(:opco_payment_method) }
 
-      let(:create_payment_service) { double(:create_payment_service) }
       let(:credit_card) { double(:credit_card) }
       let(:credit_card_id) { double(:credit_card_id) }
       let(:order_payments) { double(:order_payments) }
-      let(:order_total) { double(:order_total) }
 
       before do
-        CreatePaymentFactory.stub(:build).with(current_order).and_return(create_payment_service)
-
-        create_payment_service.stub(:call)
-
         credit_card_repository.stub(:find).with(credit_card_id).and_return(credit_card)
         current_order.stub(:payments).and_return(order_payments)
-        current_order.stub(:total).and_return(order_total)
-
         order_payments.stub(:destroy_all)
+        payment_method_widget.stub(:trigger)
       end
 
       it "clears existing payments on the order" do
@@ -177,8 +200,9 @@ module OnePageCheckout
         trigger!
       end
 
-      it "creates a new payment on the order" do
-        expect(create_payment_service).to receive(:call).with(order_total, credit_card)
+      it "triggers a :credit_card_assigned event" do
+        expect(payment_method_widget).to receive(:trigger)
+          .with(:credit_card_assigned, credit_card: credit_card)
 
         trigger!
       end
@@ -188,5 +212,80 @@ module OnePageCheckout
       end
     end
 
+    context "when receiving a :credit_card_assigned event" do
+      register_widget
+
+      let(:payment_method_widget) { root.find_widget(:opco_payment_method) }
+
+      let(:create_payment_service) { double(:create_payment_service)}
+      let(:existing_credit_card) { double(:existing_credit_card) }
+      let(:new_payment) { double(:new_payment) }
+      let(:order_total) { double(:order_total) }
+
+      before do
+        CreatePaymentFactory.stub(:build).with(current_order).and_return(create_payment_service)
+
+        create_payment_service.stub(:call)
+        current_order.stub(:total).and_return(order_total)
+      end
+
+      it "attempts to create a new payment on the order" do
+        expect(create_payment_service).to receive(:call).with(order_total, existing_credit_card)
+
+        trigger!
+      end
+
+      context "with a valid payment submission" do
+        register_widget
+
+        before do
+          create_payment_service.stub(:call).and_return(new_payment)
+        end
+
+        it "triggers a :payment_created event" do
+          expect(payment_method_widget).to receive(:trigger).with(:payment_created, payment: new_payment)
+
+          trigger!
+        end
+      end
+
+      # TODO Under what conditions does this happen?
+      context "with an invalid payment submission" do
+        register_widget
+
+        before do
+          create_payment_service.stub(:call).and_return(false)
+        end
+
+        it "redraws the :display state" do
+          expect(payment_method_widget).to receive(:replace) do |state_or_view, args|
+            expect(state_or_view).to eq(state: :display)
+          end
+
+          trigger!
+        end
+      end
+
+      context "with an invalid payment source" do
+        register_widget
+
+        let(:gateway_error) { Spree::Core::GatewayError }
+
+        before do
+          create_payment_service.stub(:call).and_raise(gateway_error)
+        end
+
+        it "triggers a :gateway_error_raised event" do
+          expect(payment_method_widget).to receive(:trigger)
+            .with(:gateway_error_raised, gateway_error: an_instance_of(gateway_error))
+
+          trigger!
+        end
+      end
+
+      def trigger!
+        trigger(:credit_card_assigned, :opco_payment_method, credit_card: existing_credit_card)
+      end
+    end
   end
 end

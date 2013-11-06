@@ -1,0 +1,5 @@
+<%= widget_div(data: { hook: 'opco-gateway-notifications' }) do %>
+  <% notifications.flatten.each do |notification| %>
+    <li><%= notification %></li>
+  <% end %>
+<% end %>

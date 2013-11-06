@@ -1,6 +1,9 @@
 module OnePageCheckout
   class PaymentMethodWidget < Apotomo::Widget
     has_widgets do |panel|
+      panel << widget('one_page_checkout/gateway_notifications',
+                      :opco_gateway_notifications)
+
       panel << widget('one_page_checkout/credit_card_wallet/panel',
                       :opco_credit_card_wallet,
                       options.slice(:current_credit_card, :order, :user))
@@ -13,7 +16,8 @@ module OnePageCheckout
     responds_to_event :address_created, with: :assign_address_to_order
     responds_to_event :assign_address, with: :assign_address_to_order
     responds_to_event :assign_credit_card
-    responds_to_event :credit_card_created, with: :create_payment_using_credit_card
+    responds_to_event :credit_card_created, with: :create_payment_using_new_credit_card
+    responds_to_event :credit_card_assigned, with: :create_payment_using_existing_credit_card
 
     def initialize(parent, id, options = {})
       super(parent, id, options)
@@ -39,8 +43,23 @@ module OnePageCheckout
       trigger :billing_address_updated, address: current_address
     end
 
-    def create_payment_using_credit_card(event)
-      if payment = create_payment_service.call(order.total, event.data.fetch(:credit_card))
+    def create_payment_using_existing_credit_card(event)
+      credit_card = event.data.fetch(:credit_card)
+      create_payment_using_credit_card(credit_card)
+    rescue Spree::Core::GatewayError => error
+      trigger :gateway_error_raised, gateway_error: error
+    end
+
+    def create_payment_using_new_credit_card(event)
+      credit_card = event.data.fetch(:credit_card)
+      create_payment_using_credit_card(credit_card)
+    rescue Spree::Core::GatewayError => error
+      credit_card.destroy
+      trigger :gateway_error_raised, gateway_error: error
+    end
+
+    def create_payment_using_credit_card(credit_card)
+      if payment = create_payment_service.call(order.total, credit_card)
         trigger :payment_created, payment: payment
       else
         replace state: :display
@@ -52,7 +71,7 @@ module OnePageCheckout
 
       order.payments.destroy_all
 
-      trigger :credit_card_created, credit_card: credit_card
+      trigger :credit_card_assigned, credit_card: credit_card
     end
 
     private
