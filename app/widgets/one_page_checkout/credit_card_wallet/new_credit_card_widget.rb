@@ -18,8 +18,6 @@ module OnePageCheckout::CreditCardWallet
     end
 
     def create_credit_card(event)
-      Rails.logger.warn event.data
-
       if credit_card = create_credit_card_service.call(event.data.fetch(:credit_card))
         trigger :credit_card_created, credit_card: credit_card
       else

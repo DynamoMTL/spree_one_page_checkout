@@ -8,8 +8,6 @@ class CreateCreditCard
     return unless credit_card_form.validate(attrs)
 
     credit_card_form.save do |data, nested|
-      Rails.logger.warn nested
-
       @credit_card = credit_card_factory.create!(nested)
     end
 
