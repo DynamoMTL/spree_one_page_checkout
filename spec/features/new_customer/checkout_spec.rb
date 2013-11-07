@@ -77,7 +77,7 @@ describe "A new customer", type: :feature, js: true do
 
       # shipping_method.choose
       within '[data-hook=opco-shipping-method]' do
-        select shipping_method.name
+        find("option[value='#{shipping_method.id}']").select_option
       end
 
       expect(current_path).to eq '/checkout'

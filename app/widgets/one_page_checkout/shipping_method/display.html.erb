@@ -1,10 +1,10 @@
 <%= widget_div(data: { hook: "opco-shipping-method" }) do %>
-  <%=
-    select_tag :shipping_method_id, shipping_method_options,
-      { data: {
-        method: :post,
-        remote: true,
-        url: url_for_event(:choose_shipping_method)
-      }, prompt: "Please choose a shipping method:"}
-  %>
+  <%= semantic_fields_for order do |fields| %>
+    <%= fields.input :shipping_method_id, as: :select,
+        collection: shipping_rates,
+        member_label: Proc.new { |rate| "#{rate.name}: #{rate.display_price}"},
+        prompt: "Please choose a delivery option",
+        data: { method: :post, remote: true, url: url_for_event(:choose_shipping_method) }
+      %>
+  <% end %>
 <% end %>
