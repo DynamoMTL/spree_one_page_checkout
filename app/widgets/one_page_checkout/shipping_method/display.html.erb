@@ -4,7 +4,10 @@
         collection: shipping_rates,
         member_label: Proc.new { |rate| "#{rate.name}: #{rate.display_price}"},
         prompt: "Please choose a delivery option",
-        data: { method: :post, remote: true, url: url_for_event(:choose_shipping_method) }
+        input_html: {
+          name: :shipping_method_id,
+          data: { method: :post, remote: true, url: url_for_event(:choose_shipping_method) }
+        }
       %>
   <% end %>
 <% end %>
