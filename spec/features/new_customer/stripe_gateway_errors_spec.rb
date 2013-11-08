@@ -6,7 +6,7 @@ require 'spec_helper'
 
 describe "A new customer", type: :feature, js: true do
   before(:each) { configure_store_with_stripe }
-  after(:each) { sleep 5 }
+  after(:each) { wait_for_ajax }
 
   before do
     sign_up!
