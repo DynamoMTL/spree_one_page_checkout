@@ -39,4 +39,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-apotomo', '~> 0.9.7'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'vcr'
+  s.add_development_dependency 'webmock'
 end
