@@ -1,0 +1,51 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sk_test_fNLYXafQ1lUiytpbBX6l6kB1:@api.stripe.com/v1/customers
+    body:
+      encoding: US-ASCII
+      string: card[number]=4000000000000002&card[exp_month]=1&card[exp_year]=2015&card[cvc]=123&email=guy%40incogni.to
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Stripe/v1 ActiveMerchantBindings/1.38.0
+      X-Stripe-Client-User-Agent:
+      - ! '{"bindings_version":"1.38.0","lang":"ruby","lang_version":"1.9.3 p448 (2013-06-27)","platform":"x86_64-darwin12.4.0","publisher":"active_merchant","uname":"Darwin
+        dwright-mbair.local 12.5.0 Darwin Kernel Version 12.5.0: Sun Sep 29 13:33:47
+        PDT 2013; root:xnu-2050.48.12~1/RELEASE_X86_64 x86_64"}'
+      X-Stripe-Client-User-Metadata:
+      - ! '{"ip":null}'
+      Accept:
+      - ! '*/*'
+  response:
+    status:
+      code: 402
+      message: Payment Required
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 08 Nov 2013 15:55:52 GMT
+      Content-Type:
+      - application/json;charset=utf-8
+      Content-Length:
+      - '117'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-cache, no-store
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Max-Age:
+      - '300'
+    body:
+      encoding: US-ASCII
+      string: ! "{\n  \"error\": {\n    \"message\": \"Your card was declined.\",\n
+        \   \"type\": \"card_error\",\n    \"code\": \"card_declined\"\n  }\n}\n"
+    http_version: 
+  recorded_at: Fri, 08 Nov 2013 15:55:52 GMT
+recorded_with: VCR 2.7.0

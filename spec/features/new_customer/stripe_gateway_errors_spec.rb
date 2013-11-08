@@ -41,15 +41,12 @@ describe "A new customer", type: :feature, js: true do
         end
       end
 
-      it "displays the corresponding gateway error message" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to have_content /Your card was declined/i
-        end
-      end
-
-      it "doesn't persist the credit card" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+      it "displays the corresponding gateway error message and doesn't persist the card" do
+        VCR.use_cassette 'stripe-new-card-declined' do
+          within '[data-hook=opco-payment-method]' do
+            expect(page).to have_content /Your card was declined/i
+            expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+          end
         end
       end
     end
@@ -71,15 +68,12 @@ describe "A new customer", type: :feature, js: true do
         end
       end
 
-      it "displays the corresponding gateway error message" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to have_content /Your card number is incorrect/i
-        end
-      end
-
-      it "doesn't persist the credit card" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+      it "displays the corresponding gateway error message and doesn't persist the card" do
+        VCR.use_cassette 'stripe-new-card-bad-number' do
+          within '[data-hook=opco-payment-method]' do
+            expect(page).to have_content /Your card number is incorrect/i
+            expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+          end
         end
       end
     end
@@ -101,15 +95,12 @@ describe "A new customer", type: :feature, js: true do
         end
       end
 
-      it "displays the corresponding gateway error message" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to have_content /Your card's expiration date is incorrect/i
-        end
-      end
-
-      it "doesn't persist the credit card" do
-        within '[data-hook=opco-payment-method]' do
-          expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+      it "displays the corresponding gateway error message and doesn't persist the card" do
+        VCR.use_cassette 'stripe-new-card-expired-card' do
+          within '[data-hook=opco-payment-method]' do
+            expect(page).to have_content /Your card's expiration date is incorrect/i
+            expect(page).to_not have_css('[data-hook=opco-existing-credit-card]')
+          end
         end
       end
     end
