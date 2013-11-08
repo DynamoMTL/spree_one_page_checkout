@@ -20,7 +20,7 @@ FactoryGirl.find_definitions
 
 require 'vcr'
 VCR.configure do |vcr|
-  vcr.allow_http_connections_when_no_cassette = true
+  vcr.ignore_localhost = true
   vcr.cassette_library_dir = 'spec/support/cassettes'
   vcr.hook_into :webmock
 end
