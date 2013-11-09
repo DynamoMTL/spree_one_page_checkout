@@ -20,7 +20,7 @@ module Extensions
       end
 
       def synchronize_payment_amount
-        return if complete? || payments_in_sync?
+        return if complete? || payments_in_sync? || payments.empty?
         payments.last.update_column(:amount, total)
       end
 
