@@ -16,5 +16,9 @@ module Forms
 
     validates :firstname, :lastname, :address1,
       :city, :country_id, :zipcode, :phone, presence: true
+
+    if ::Spree::Config[:address_requires_state]
+      validates :state_name, presence: true
+    end
   end
 end
