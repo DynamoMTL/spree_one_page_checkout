@@ -1,5 +1,6 @@
 module OnePageCheckout
   class ConfirmOrderWidget < Apotomo::Widget
+    responds_to_event :shipping_address_updated, with: :redraw, passing: :root
     responds_to_event :shipping_method_updated, with: :redraw, passing: :root
     responds_to_event :confirm_order
 
