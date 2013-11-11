@@ -5,6 +5,7 @@ module SpreeOnePageCheckout
     require 'reform'
 
     require 'spree/core'
+    require 'spree/sample'
     isolate_namespace Spree
     engine_name 'spree_one_page_checkout'
 
