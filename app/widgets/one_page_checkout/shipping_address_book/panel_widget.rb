@@ -20,6 +20,9 @@ module OnePageCheckout
     end
 
     def billing_address_updated(event)
+      # FIXME Wrong place, untested
+      @current_address = order.reload.bill_address
+
       replace state: :display
     end
   end
