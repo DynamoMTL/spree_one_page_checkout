@@ -1,7 +1,5 @@
 module OnePageCheckout
   class OrderSummaryWidget < Apotomo::Widget
-    include Spree::Core::Engine.routes.url_helpers
-
     helper Spree::BaseHelper
     helper Spree::OrdersHelper
 
