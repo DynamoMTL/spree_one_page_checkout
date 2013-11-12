@@ -10,12 +10,9 @@ module Extensions
 
       def assign_default_credit_card
         return if payments.present?
+
         if user && user.credit_cards
-          self.payments.create!({
-            payment_method: ::Spree::PaymentMethod.where(environment: Rails.env, active: true).first,
-            source: user.credit_cards.last,
-            amount: total
-          }, without_protection: true)
+          CreatePaymentFactory.build(self).call(total, user.credit_cards.last)
         end
       end
 
