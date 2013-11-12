@@ -11,7 +11,7 @@ module Extensions
       def assign_default_credit_card
         return if payments.present?
 
-        if user && user.credit_cards
+        if user && user.credit_cards.any?
           CreatePaymentFactory.build(self).call(total, user.credit_cards.last)
         end
       end
