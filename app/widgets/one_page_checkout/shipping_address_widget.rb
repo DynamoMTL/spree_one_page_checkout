@@ -26,6 +26,7 @@ module OnePageCheckout
 
       # FIXME Exposes internal structure of Order
       order.update_attribute(:ship_address, address)
+      order.update_attribute(:bill_address, address) unless order.bill_address
       order.remove_invalid_shipments!
       order.create_tax_charge!
 
