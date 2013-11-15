@@ -3,6 +3,7 @@ module OnePageCheckout
     helper Spree::BaseHelper
     helper Spree::OrdersHelper
 
+    responds_to_event :billing_address_updated, with: :redraw, passing: :root
     responds_to_event :shipping_address_updated, with: :redraw, passing: :root
     responds_to_event :shipping_method_updated, with: :redraw, passing: :root
 
