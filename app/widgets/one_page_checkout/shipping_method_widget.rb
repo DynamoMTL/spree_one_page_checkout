@@ -1,7 +1,8 @@
 class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   include ActionView::Helpers::FormOptionsHelper
 
-  responds_to_event :shipping_address_updated, passing: :root
+  responds_to_event :billing_address_updated, with: :redraw, passing: :root
+  responds_to_event :shipping_address_updated, with: :redraw, passing: :root
   responds_to_event :choose_shipping_method
 
   def initialize(parent, id, options = {})
@@ -17,7 +18,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
     render
   end
 
-  def shipping_address_updated(event)
+  def redraw(event)
     replace state: :display
   end
 
