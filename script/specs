@@ -1,0 +1,6 @@
+#!/bin/sh
+# Run the spec suite.
+
+cd "$(dirname $0)"/..
+
+bundle exec rspec spec/
