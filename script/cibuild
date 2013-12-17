@@ -3,5 +3,6 @@
 
 cd "$(dirname $0)"/..
 
-bundle exec rake test_app &&
+bundle install --local &&
+  bundle exec rake test_app &&
   bundle exec rspec spec/
