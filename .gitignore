@@ -17,3 +17,6 @@ spec/dummy
 zeus.json
 custom_plan.rb
 .env
+/bin
+.ruby-version
+.phantom-version
