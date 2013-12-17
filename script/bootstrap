@@ -1,0 +1,8 @@
+#!/bin/sh
+# Make sure local dependencies are met.
+
+cd "$(dirname $0)"/..
+
+bundle install --binstubs=bin --path=.bundle &&
+  bundle exec rake test_app &&
+  bundle exec rake spec
