@@ -1,0 +1,7 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  payment_has_been_cancelled: The payment has been cancelled.
+  change_payment_method: Change Payment Method
+  complete_skrill_checkout: Please complete Skrill checkout before continuing
