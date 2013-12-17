@@ -4,6 +4,8 @@ This Spree extension replaces the default Spree checkout workflow with a
 streamlined one-page checkout, with reusable address and credit-card
 features.
 
+[![Build Status](https://travis-ci.org/DynamoMTL/spree_one_page_checkout.png?branch=master)](https://travis-ci.org/DynamoMTL/spree_one_page_checkout)
+
 ## Example
 
 To be added.
