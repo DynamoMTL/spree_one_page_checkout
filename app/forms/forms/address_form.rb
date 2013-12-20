@@ -6,7 +6,6 @@ module Forms
       firstname
       lastname
       address1
-      address2
       city
       state_name
       country_id

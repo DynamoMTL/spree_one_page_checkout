@@ -32,7 +32,20 @@ module Forms
 
     describe "validation" do
       let(:address) { Spree::Address.new }
-      let(:valid_attributes) { build(:address).attributes.stringify_keys! }
+
+      let(:valid_attributes) {{
+        firstname: Faker::Name.first_name,
+        lastname: Faker::Name.last_name,
+        company: Faker::Company.name,
+        address1: Faker::Address.street_address,
+        address2: Faker::Address.secondary_address,
+        city: Faker::Address.city,
+        state_name: Faker::AddressUS.state,
+        zipcode: Faker::AddressUS.zip_code,
+        country_id: '1',
+        phone: Faker::PhoneNumber.short_phone_number,
+        alternative_phone: Faker::PhoneNumber.short_phone_number
+      }.stringify_keys}
 
       subject { Forms::AddressForm.new(address) }
 
@@ -62,6 +75,12 @@ module Forms
 
       context "without :city present" do
         it_should_behave_like 'an invalid AddressForm', 'city' => ''
+      end
+
+      context "without :state_name present" do
+        context "and Spree is configured to require state information" do
+          it_should_behave_like 'an invalid AddressForm', 'state_name' => ''
+        end
       end
 
       context "without :country_id present" do
