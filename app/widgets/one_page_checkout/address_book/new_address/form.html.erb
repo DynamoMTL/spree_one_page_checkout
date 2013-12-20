@@ -5,7 +5,6 @@
       <%= f.input :firstname, label: t(:first_name) %>
       <%= f.input :lastname, label: t(:last_name) %>
       <%= f.input :address1, label: t(:street_address) %>
-      <%= f.input :address2, label: t(:street_address_2) %>
       <%= f.input :city, label: t(:city) %>
       <%= f.input :state_name, as: :select, collection: ['New York'], label: t(:state) %>
       <%= f.input :country_id, as: :select, collection: Spree::Country.all, label: t(:country), include_blank: false %>
