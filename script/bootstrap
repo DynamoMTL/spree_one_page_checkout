@@ -3,5 +3,5 @@
 
 cd "$(dirname $0)"/..
 
-bundle install --local --binstubs=bin --path=.bundle &&
+bundle install --binstubs=bin --path=.bundle &&
   bundle exec rake test_app
