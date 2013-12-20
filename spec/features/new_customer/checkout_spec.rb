@@ -71,8 +71,8 @@ describe "A new customer", type: :feature, js: true do
 
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.ship_address.tap do |shipping_address|
-        expect(shipping_address.lastname).to match /Incognito/
-        expect(shipping_address.address1).to match /1234 Fake St/
+        expect(shipping_address.lastname).to match(/Incognito/)
+        expect(shipping_address.address1).to match(/1234 Fake St/)
       end
 
       # shipping_method.choose
@@ -140,8 +140,8 @@ describe "A new customer", type: :feature, js: true do
 
       # FIXME Remove these DMA expectations once the full spec is implemented?
       current_order.reload.tap do |order|
-        expect(order.bill_address.lastname).to match /Incognito/
-        expect(order.bill_address.address1).to match /1234 Fake St/
+        expect(order.bill_address.lastname).to match(/Incognito/)
+        expect(order.bill_address.address1).to match(/1234 Fake St/)
 
         expect(order.payments).to have(1).item
       end
