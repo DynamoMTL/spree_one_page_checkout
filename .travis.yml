@@ -3,3 +3,6 @@ rvm:
   - 1.9.3
 install: true
 script: ./script/cibuild
+env:
+  global:
+    secure: YoohH8nRPiASXIfEwuH8xZ+aYz2pJQ36VVo6sxSuPdy4GgvGVkZks/QuJQllO+u3mDR8EgQFYlcc18TxdVjiIkYDNP8YJoVJKSisaPOAmXRld9mHpd50wwOyXA+YHSokNQLibilDQsGGU8QPuSpgdHxF3mWehx/vBBWhPOzKNb8=
