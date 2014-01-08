@@ -64,6 +64,11 @@ module OnePageCheckout::ShippingAddressBook
     context "when receiving a :billing_address_updated event" do
       register_widget
 
+      before do
+        current_order.stub(:reload).and_return(current_order)
+        current_order.stub(:ship_address).and_return(double)
+      end
+
       it "redraws the widget" do
         expect(panel_widget).to receive(:replace) do |with, payload|
           expect(with).to eq state: :display

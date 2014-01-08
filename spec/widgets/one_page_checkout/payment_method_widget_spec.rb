@@ -48,6 +48,7 @@ module OnePageCheckout
       before do
         address_repository.stub(:find).with(new_address).and_return(new_address)
         current_order.stub(:update_attribute)
+        current_order.stub(:ship_address).and_return(double)
       end
 
       it "assigns the new address as the order's billing address" do
@@ -60,6 +61,34 @@ module OnePageCheckout
         expect(payment_method_widget).to receive(:trigger).with(:billing_address_updated, address: new_address)
 
         trigger!
+      end
+
+      context "without a shipping address assigned" do
+        register_widget
+
+        before do
+          current_order.stub(:create_tax_charge!)
+          current_order.stub(:remove_invalid_shipments!)
+          current_order.stub(:ship_address).and_return(false)
+        end
+
+        it "assigns the new address as the order's shipping address" do
+          expect(current_order).to receive(:update_attribute).with(:ship_address, new_address)
+
+          trigger!
+        end
+
+        it "removes invalid shipments" do
+          expect(current_order).to receive(:remove_invalid_shipments!)
+
+          trigger!
+        end
+
+        it "creates tax charges" do
+          expect(current_order).to receive(:create_tax_charge!)
+
+          trigger!
+        end
       end
 
       def trigger!
@@ -76,6 +105,7 @@ module OnePageCheckout
       before do
         address_repository.stub(:find).with(new_address).and_return(new_address)
         current_order.stub(:update_attribute)
+        current_order.stub(:ship_address).and_return(double)
       end
 
       it "assigns the new address as the order's billing address" do
