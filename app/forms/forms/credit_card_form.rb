@@ -3,6 +3,7 @@ module Forms
     model :credit_card
 
     properties %w(
+      name
       month
       number
       user_id

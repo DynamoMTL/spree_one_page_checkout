@@ -1,7 +1,8 @@
 <p>Order summary goes here.</p>
 
-<%= render_widget :opco_order_summary, :display %>
-<%= render_widget :opco_shipping_address, :display %>
-<%= render_widget :opco_shipping_method, :display %>
-<%= render_widget :opco_payment_method, :display %>
+<fieldset><%= render_widget :opco_order_summary, :display %></fieldset>
+<fieldset><%= render_widget :opco_shipping_address, :display %></fieldset>
+<fieldset><%= render_widget :opco_shipping_method, :display %></fieldset>
+<fieldset><%= render_widget :opco_payment_method, :display %></fieldset>
+
 <%= render_widget :opco_confirm_order, :display %>

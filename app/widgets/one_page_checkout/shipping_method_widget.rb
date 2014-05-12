@@ -6,7 +6,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   responds_to_event :choose_shipping_method
 
   def initialize(parent, id, options = {})
-    super(parent, id, options)
+    super(parent, id, options) 
 
     @order = options.fetch(:order)
     @user = options.fetch(:user)
@@ -25,7 +25,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   def choose_shipping_method(event)
     # FIXME Exposes internal structure of Order
     order.update_attribute(:shipping_method_id, event.data.fetch(:shipping_method_id))
-    order.create_shipment!
+    order.create_propsed_shipment
     order.create_tax_charge!
 
     trigger :shipping_method_updated
@@ -35,19 +35,25 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
 
   attr_reader :order
   helper_method :order, :shipping_rates
+  helper_method :shipping_method_options
 
   def current_shipping_method
     # FIXME Exposes internal structure of Order
     order.shipping_method_id
   end
 
-  def shipping_rates
+  def shipping_methods
     # FIXME Exposes internal structure of Order
-    @_shipping_rates ||= order.rate_hash
+    if order.shipments.first
+      @_shipping_methods ||= order.shipments.first.shipping_rates 
+    else
+      []
+    end
   end
 
   def shipping_method_options
     @_shipping_method_options ||=
-      options_from_collection_for_select(shipping_methods, :id, :name, current_shipping_method)
+      options_from_collection_for_select(shipping_methods, :id, :name, current_shipping_method)    
   end
 end
+  

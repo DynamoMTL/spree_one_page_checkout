@@ -1,3 +1,15 @@
-<%= widget_div(tag: :address, data: { hook: 'opco-existing-address'}) do %>
-  <%= link_to @address.to_s, url_for_event(:assign_address, address: @address), remote: true %>
+<%= widget_div(data: { hook: 'opco-existing-address'}) do %>
+<div class="four columns alpha">
+<address>
+    <strong><%= @address.firstname %> <%= @address.lastname %></strong><br/>
+    <%= @address.address1 %><br/>
+    <%= @address.city %>
+    <%= @address.zipcode %><br/>
+    <%= @address.state_name %>
+    <br/>
+    <%= @address.phone %>
+    <br/>
+    <%= link_to "-> Select this address", url_for_event(:assign_address, address: @address), remote: true %>
+</address>
+</div>
 <% end %>

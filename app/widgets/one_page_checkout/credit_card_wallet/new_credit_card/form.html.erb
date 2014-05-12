@@ -2,6 +2,7 @@
   <%= semantic_form_for credit_card_form, url: url_for_event(:create_credit_card), remote: true do |f| %>
     <%= f.inputs do %>
       <%= f.input :user_id, as: :hidden, input_html: { value: user.id } %>
+      <%= f.input :name, label: t(:name) %>
       <%= f.input :number, label: t(:card_number) %>
 
       <%= f.input :month, as: :select, label: t(:expiration_month),

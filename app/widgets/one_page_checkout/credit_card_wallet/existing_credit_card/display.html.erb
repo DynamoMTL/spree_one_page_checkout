@@ -1,3 +1,10 @@
 <%= widget_div(data: { hook: 'opco-existing-credit-card'}) do %>
-  <%= link_to @credit_card.display_number, url_for_event(:assign_credit_card, credit_card: @credit_card), remote: true %>
+    <div class="four columns alpha">
+        <address>
+            <span class="type"><%= @credit_card.cc_type %></span><br/>
+            <%= @credit_card.month %> /  <%= @credit_card.year %><br/>
+            <%= @credit_card.display_number %><br/><br/>
+            <%= link_to "Select this card", url_for_event(:assign_credit_card, credit_card: @credit_card), remote: true %>
+        </address>
+    </div>
 <% end %>
