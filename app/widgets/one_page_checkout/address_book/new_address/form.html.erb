@@ -1,13 +1,13 @@
 <%= widget_div(data: { hook: 'opco-new-address' }) do %>
   <%= semantic_form_for address_form, url: url_for_event(:create_address), remote: true do |f| %>
     <%= f.inputs do %>
-      <%= f.input :user_id, hidden: true, input_html: { value: user.id } %>
+      <%= f.input :user_id, as: :hidden, input_html: { value: user.id } %>
       <%= f.input :firstname, label: t(:first_name) %>
       <%= f.input :lastname, label: t(:last_name) %>
       <%= f.input :address1, label: t(:street_address) %>
       <%= f.input :city, label: t(:city) %>
       <%= f.input :state_name, as: :select, collection: ['New York'], label: t(:state) %>
-      <%= f.input :country_id, as: :select, collection: Spree::Country.all, label: t(:country), include_blank: false %>
+      <%= f.input :country_id, as: :select, collection: Spree::Country.order(:name), label: t(:country), include_blank: false %>
       <%= f.input :zipcode, label: t(:zip) %>
       <%= f.input :phone, label: t(:telephone) %>
     <%- end %>
