@@ -25,7 +25,7 @@ class OnePageCheckout::ShippingMethodWidget < Apotomo::Widget
   def choose_shipping_method(event)
     # FIXME Exposes internal structure of Order
     order.update_attribute(:shipping_method_id, event.data.fetch(:shipping_method_id))
-    order.create_propsed_shipment
+    order.create_proposed_shipments
     order.create_tax_charge!
 
     trigger :shipping_method_updated
