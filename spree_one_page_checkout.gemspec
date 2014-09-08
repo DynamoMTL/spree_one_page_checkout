@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.3.0.beta'
-  s.add_dependency 'apotomo', '~> 1.2.3'
+  s.add_dependency 'spree_core', '~> 2.3.0'
+  s.add_dependency 'apotomo', '~> 1.3.0'
   s.add_dependency 'formtastic', '~> 2.2.1'
   s.add_dependency 'reform', '~> 0.2.0'
 
@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'poltergeist'
   s.add_development_dependency 'rspec-rails',  '~> 2.13'
-  s.add_development_dependency 'rspec-apotomo', '~> 0.9.7'
+  s.add_development_dependency 'rspec-apotomo', '~> 1.3.0'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'vcr'
